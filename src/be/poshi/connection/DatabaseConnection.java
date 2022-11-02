@@ -8,14 +8,12 @@ import javax.swing.JOptionPane;
 
 public class DatabaseConnection {
 
-	// Attributs
 	private static Connection instance = null;
 
-	// Constructeurs
 	private DatabaseConnection() {
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-			String url = "jdbc:ucanaccess://./VideoGamesDb.accdb";
+			String url = "jdbc:ucanaccess://./VideoGameDb.accdb";
 			instance = DriverManager.getConnection(url);
 		} catch (ClassNotFoundException ex) {
 			JOptionPane.showMessageDialog(null, "Classe de driver introuvable" + ex.getMessage());
@@ -29,7 +27,6 @@ public class DatabaseConnection {
 		}
 	}
 
-	// Methodes supplementaires
 	public static Connection getInstance() {
 		if (instance == null) {
 			new DatabaseConnection();
