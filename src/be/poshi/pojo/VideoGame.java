@@ -67,8 +67,9 @@ public class VideoGame implements Serializable{
 	// Methode de base
 	@Override
 	public String toString() {
-		return "VideoGame [name=" + name + ", creditCost=" + creditCost + ", console=" + console + ", bookings="
-				+ bookings + ", copies=" + copies + "]";
+		return "VideoGame [idVideoGame=" + idVideoGame + ", name=" + name + ", creditCost=" + creditCost + ", console="
+				+ console + ", version=" + version + ", bookings=" + bookings + ", copies=" + copies + "]";
 	}
-
+	
+	
 }

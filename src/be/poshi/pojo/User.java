@@ -2,6 +2,8 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 
+import be.poshi.dao.UserDAO;
+
 public abstract class User implements Serializable {
 
 	// Attributs
@@ -38,13 +40,14 @@ public abstract class User implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public void Login() {
+	public static User Login(String username, String password) throws Exception {
+		return UserDAO.Login(username, password);
 	}
 
 	// Methode de base
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + "]";
+		return "User [idUser=" + idUser + ", username=" + username + ", password=" + password + "]";
 	}
 
 }

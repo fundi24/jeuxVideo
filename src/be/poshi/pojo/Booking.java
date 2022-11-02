@@ -42,7 +42,7 @@ public class Booking implements Serializable{
 	// Methode de base
 	@Override
 	public String toString() {
-		return "Booking [bookingDate=" + bookingDate + ", player=" + player + ", videoGame=" + videoGame + "]";
+		return "Booking [idBooking=" + idBooking+ "bookingDate=" + bookingDate + ", player=" + player + ", videoGame=" + videoGame + "]";
 	}
 
 }

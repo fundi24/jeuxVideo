@@ -68,7 +68,8 @@ public class Loan implements Serializable{
 	// Methode de base
 	@Override
 	public String toString() {
-		return "Loan [startDate=" + startDate + ", endDate=" + endDate + ", ongoing=" + ongoing + ", copy=" + copy
-				+ ", lender=" + lender + ", borrower=" + borrower + "]";
+		return "Loan [idLoan=" + idLoan + ", startDate=" + startDate + ", endDate=" + endDate + ", ongoing=" + ongoing
+				+ ", copy=" + copy + ", lender=" + lender + ", borrower=" + borrower + "]";
 	}
+
 }

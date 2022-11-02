@@ -39,7 +39,7 @@ public class Copy implements Serializable {
 	// Methode de base
 	@Override
 	public String toString() {
-		return "Copy [videoGame=" + videoGame + ", loan=" + loan + ", owner=" + owner + "]";
+		return "Copy [IdCopy = " + idCopy + ",videoGame=" + videoGame + ", loan=" + loan + ", owner=" + owner + "]";
 	}
 
 }

@@ -1,7 +1,8 @@
 package be.poshi.pojo;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+
 
 public class Player extends User {
 
@@ -9,8 +10,8 @@ public class Player extends User {
 	private static final long serialVersionUID = 1049137847898033097L;
 	private int credit;
 	private String pseudo;
-	private LocalDate registrationDate;
-	private LocalDate dateOfBirth;
+	private Date registrationDate;
+	private Date dateOfBirth;
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 	private ArrayList<Loan> loans;
@@ -25,8 +26,8 @@ public class Player extends User {
 		borrowings = new ArrayList<Loan>();
 	}
 
-	public Player(int idUser, String username, String password, int credit, String pseudo, LocalDate registrationDate,
-			LocalDate dateOfBirth) {
+	public Player(int idUser, String username, String password, int credit, String pseudo, Date registrationDate,
+			Date dateOfBirth) {
 		super(idUser, username, password);
 		this.credit = credit;
 		this.pseudo = pseudo;
@@ -56,23 +57,25 @@ public class Player extends User {
 		this.pseudo = pseudo;
 	}
 
-	public LocalDate getRegistrationDate() {
+	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 
-	public void setRegistrationDate(LocalDate registrationDate) {
+	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
-	public LocalDate getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(LocalDate dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
 	// Methodes supplementaires
+	
+	
 	public boolean LoanAllowend() {
 		return false;
 	}
