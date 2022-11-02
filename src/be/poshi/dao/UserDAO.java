@@ -54,7 +54,7 @@ public class UserDAO extends DAO<User> {
 				}
 				user = PlayerDAO.find(id);
 			} else {
-				throw new Exception("Utilisateur non trouvé !");
+				throw new Exception("User not found !");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
