@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Player extends User {
 
 	// Attributs
+	private static final long serialVersionUID = 1049137847898033097L;
 	private int credit;
 	private String pseudo;
 	private LocalDate registrationDate;
@@ -24,9 +25,9 @@ public class Player extends User {
 		borrowings = new ArrayList<Loan>();
 	}
 
-	public Player(String username, String password, int credit, String pseudo, LocalDate registrationDate,
+	public Player(int idUser, String username, String password, int credit, String pseudo, LocalDate registrationDate,
 			LocalDate dateOfBirth) {
-		super(username, password);
+		super(idUser, username, password);
 		this.credit = credit;
 		this.pseudo = pseudo;
 		this.registrationDate = registrationDate;

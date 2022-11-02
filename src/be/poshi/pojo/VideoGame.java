@@ -1,13 +1,17 @@
 package be.poshi.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class VideoGame {
+public class VideoGame implements Serializable{
 
 	// Attributs
+	private static final long serialVersionUID = 5171965949662273923L;
+	private int idVideoGame;
 	private String name;
 	private String creditCost;
 	private String console;
+	private String version;
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 
@@ -17,9 +21,11 @@ public class VideoGame {
 		copies = new ArrayList<Copy>();
 	}
 
-	public VideoGame(String name, String creditCost, String console) {
+	public VideoGame(int idVideoGame, String name, String creditCost, String version, String console) {
+		this.idVideoGame = idVideoGame;
 		this.name = name;
 		this.creditCost = creditCost;
+		this.version = version;
 		this.console = console;
 		bookings = new ArrayList<Booking>();
 		copies = new ArrayList<Copy>();

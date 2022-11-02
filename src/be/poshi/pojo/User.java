@@ -1,8 +1,12 @@
 package be.poshi.pojo;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
 
 	// Attributs
+	private static final long serialVersionUID = 8701479018979360310L;
+	private int idUser;
 	private String username;
 	private String password;
 
@@ -10,7 +14,8 @@ public abstract class User {
 	public User() {
 	}
 
-	public User(String username, String password) {
+	public User(int idUser, String username, String password) {
+		this.idUser = idUser;
 		this.username = username;
 		this.password = password;
 	}

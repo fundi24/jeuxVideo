@@ -2,6 +2,9 @@ package be.poshi.pojo;
 
 public class Administrator extends User {
 
+	// Attributs
+	private static final long serialVersionUID = 4008809295751501527L;
+
 	// Constructeurs
 	public Administrator() {
 		super();

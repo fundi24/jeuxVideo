@@ -1,10 +1,13 @@
 package be.poshi.pojo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Loan {
+public class Loan implements Serializable{
 
 	// Attributs
+	private static final long serialVersionUID = 8365143624293081836L;
+	private int idLoan;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private Boolean ongoing;
@@ -13,13 +16,15 @@ public class Loan {
 	private Player borrower;
 
 	// Constructeurs
-	public Loan(Copy copy, Player lender, Player borrower) {
+	public Loan(int idLoan, Copy copy, Player lender, Player borrower) {
+		this.idLoan = idLoan;
 		this.copy = copy;
 		this.lender = lender;
 		this.borrower = borrower;
 	}
 
-	public Loan(Copy copy, Player lender, Player borrower, LocalDate startDate, LocalDate endDate, Boolean ongoing) {
+	public Loan(int idLoan, Copy copy, Player lender, Player borrower, LocalDate startDate, LocalDate endDate, Boolean ongoing) {
+		this.idLoan = idLoan;
 		this.copy = copy;
 		this.lender = lender;
 		this.borrower = borrower;
