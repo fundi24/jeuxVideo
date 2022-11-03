@@ -21,6 +21,7 @@ public class HomeWindow extends JFrame {
 	private User connectedUser;
 	private JLabel LblPseudo;
 	private JLabel LblHomePage;
+	private JLabel LblCredit;
 
 	/**
 	 * Launch the application.
@@ -63,6 +64,7 @@ public class HomeWindow extends JFrame {
 		LblPseudo.setBounds(352, 10, 45, 13);
 		contentPane.add(LblPseudo);
 
+		
 		JButton BtnLogout = new JButton("Logout");
 		BtnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -83,6 +85,7 @@ public class HomeWindow extends JFrame {
 		BtnGetGameCatalogue.setBounds(10, 114, 139, 21);
 		contentPane.add(BtnGetGameCatalogue);
 
+
 		if (connectedUser instanceof Administrator) {
 			LblPseudo.setText("Admin");
 			JButton BtnAddVideoGame = new JButton("Add a video game");
@@ -99,7 +102,13 @@ public class HomeWindow extends JFrame {
 		}
 		if (connectedUser instanceof Player) {
 			Player player = (Player) user;
+			
+			LblCredit = new JLabel("Credit");
+			LblCredit.setBounds(325, 24, 72, 13);
+			contentPane.add(LblCredit);
+
 			LblPseudo.setText(player.getPseudo());
+			LblCredit.setText(player.getCredit() + " credit(s)");
 		}
 
 	}
