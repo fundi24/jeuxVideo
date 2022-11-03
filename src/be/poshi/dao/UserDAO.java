@@ -52,7 +52,9 @@ public class UserDAO extends DAO<User> {
 				if (isAdmin == true) {
 					user = AdministratorDAO.find(id);
 				}
-				user = PlayerDAO.find(id);
+				else {
+					user = PlayerDAO.find(id);
+				}
 			} else {
 				throw new Exception("User not found !");
 			}
