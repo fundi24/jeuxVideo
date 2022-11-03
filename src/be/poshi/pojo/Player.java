@@ -1,7 +1,11 @@
 package be.poshi.pojo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
+import be.poshi.dao.PlayerDAO;
 
 
 public class Player extends User {
@@ -10,8 +14,8 @@ public class Player extends User {
 	private static final long serialVersionUID = 1049137847898033097L;
 	private int credit;
 	private String pseudo;
-	private Date registrationDate;
-	private Date dateOfBirth;
+	private LocalDate registrationDate;
+	private LocalDate dateOfBirth;
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 	private ArrayList<Loan> loans;
@@ -26,8 +30,8 @@ public class Player extends User {
 		borrowings = new ArrayList<Loan>();
 	}
 
-	public Player(int idUser, String username, String password, int credit, String pseudo, Date registrationDate,
-			Date dateOfBirth) {
+	public Player(int idUser, String username, String password, int credit, String pseudo, LocalDate registrationDate,
+			LocalDate dateOfBirth) {
 		super(idUser, username, password);
 		this.credit = credit;
 		this.pseudo = pseudo;
@@ -57,30 +61,42 @@ public class Player extends User {
 		this.pseudo = pseudo;
 	}
 
-	public Date getRegistrationDate() {
+	public LocalDate getRegistrationDate() {
 		return registrationDate;
 	}
 
-	public void setRegistrationDate(Date registrationDate) {
+	public void setRegistrationDate(LocalDate registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
 	// Methodes supplementaires
 	
 	
-	public boolean LoanAllowend() {
+	public boolean LoanAllowend() { 
 		return false;
 	}
 
 	public void AddBirthdayBonus() {
+	}
+	
+	public static boolean CheckIfUsernameIsAvailable(String username) throws Exception 
+	{
+		return PlayerDAO.CheckIfUsernameIsAvailable(username);
+	}
+	
+	public boolean Register()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Player> PlayerDAO = adf.getPlayerDAO();
+		return PlayerDAO.create(this);
 	}
 
 	// Methode de base
