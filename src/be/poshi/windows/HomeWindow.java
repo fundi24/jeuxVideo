@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
 public class HomeWindow extends JFrame {
@@ -64,7 +65,6 @@ public class HomeWindow extends JFrame {
 		LblPseudo.setBounds(352, 10, 45, 13);
 		contentPane.add(LblPseudo);
 
-		
 		JButton BtnLogout = new JButton("Logout");
 		BtnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -77,7 +77,7 @@ public class HomeWindow extends JFrame {
 		BtnLogout.setBounds(10, 163, 85, 21);
 		getContentPane().add(BtnLogout);
 
-		JButton BtnGetGameCatalogue = new JButton("See the game catalogue");
+		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
 		BtnGetGameCatalogue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -109,6 +109,19 @@ public class HomeWindow extends JFrame {
 
 			LblPseudo.setText(player.getPseudo());
 			LblCredit.setText(player.getCredit() + " credit(s)");
+			
+			JButton BtnGetBirthdayGift = new JButton("Get birthday gift");
+			BtnGetBirthdayGift.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LocalDate today = LocalDate.now();
+					if(today.isEqual(player.getDateOfBirth()))
+					{
+						player.AddBirthdayBonus();
+					}
+				}
+			});
+			BtnGetBirthdayGift.setBounds(275, 163, 150, 21);
+			contentPane.add(BtnGetBirthdayGift);
 		}
 
 	}

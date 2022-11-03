@@ -5,8 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+//import java.time.ZoneId;
 
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Player;
@@ -49,7 +49,19 @@ public class PlayerDAO extends DAO<Player> {
 
 	@Override
 	public boolean update(Player obj) {
-		return false;
+		boolean success=false;
+		String query="UPDATE User SET Credit="+obj.getCredit()+" WHERE IdUser="+obj.getIdUser();
+		try {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+	        pstmt.executeUpdate();
+	        pstmt.close();
+	        success=true;
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return success; 
 	}
 
 	@Override
@@ -61,8 +73,13 @@ public class PlayerDAO extends DAO<Player> {
 					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
 			if (result.first()) {
 				player = new Player();
+				player.setIdUser(id);
 				player.setPseudo(result.getString("Pseudo"));
 				player.setCredit(result.getInt("Credit"));
+				/*LocalDate DOB = result.getDate("DateOfBirth").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				player.setDateOfBirth(DOB);
+				LocalDate RegistrationDate = result.getDate("RegistrationDate").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				player.setRegistrationDate(RegistrationDate);*/
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

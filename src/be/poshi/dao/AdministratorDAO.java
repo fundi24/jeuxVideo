@@ -36,6 +36,7 @@ public class AdministratorDAO extends DAO<Administrator> {
 					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
 			if (result.first()) {
 				administrator = new Administrator();
+				administrator.setIdUser(id);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

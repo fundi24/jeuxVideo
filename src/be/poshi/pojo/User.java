@@ -23,9 +23,19 @@ public abstract class User implements Serializable {
 	}
 
 	// Accesseurs
+	
+	public int getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
+
 
 	public void setUsername(String username) {
 		this.username = username;
