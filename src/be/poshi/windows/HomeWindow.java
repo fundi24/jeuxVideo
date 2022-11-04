@@ -70,6 +70,7 @@ public class HomeWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				connectedUser = null;
 				LoginWindow loginWindow = new LoginWindow();
+				JOptionPane.showMessageDialog(null, "You are log out");
 				loginWindow.setVisible(true);
 				dispose();
 			}
@@ -80,6 +81,9 @@ public class HomeWindow extends JFrame {
 		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
 		BtnGetGameCatalogue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GetCatalogueWindow GCW = new GetCatalogueWindow();
+				GCW.setVisible(true);
+				dispose();
 			}
 		});
 		BtnGetGameCatalogue.setBounds(10, 114, 139, 21);
@@ -113,11 +117,11 @@ public class HomeWindow extends JFrame {
 			JButton BtnGetBirthdayGift = new JButton("Get birthday gift");
 			BtnGetBirthdayGift.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					LocalDate today = LocalDate.now();
+					/*LocalDate today = LocalDate.now();
 					if(today.isEqual(player.getDateOfBirth()))
 					{
 						player.AddBirthdayBonus();
-					}
+					}*/
 				}
 			});
 			BtnGetBirthdayGift.setBounds(275, 163, 150, 21);
