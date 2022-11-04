@@ -3,13 +3,17 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
+import be.poshi.dao.VideoGameDAO;
+
 public class VideoGame implements Serializable{
 
 	// Attributs
 	private static final long serialVersionUID = 5171965949662273923L;
 	private int idVideoGame;
 	private String name;
-	private String creditCost;
+	private int creditCost;
 	private String console;
 	private String version;
 	private ArrayList<Booking> bookings;
@@ -21,7 +25,7 @@ public class VideoGame implements Serializable{
 		copies = new ArrayList<Copy>();
 	}
 
-	public VideoGame(int idVideoGame, String name, String creditCost, String version, String console) {
+	public VideoGame(int idVideoGame, String name, int creditCost, String version, String console) {
 		this.idVideoGame = idVideoGame;
 		this.name = name;
 		this.creditCost = creditCost;
@@ -32,6 +36,24 @@ public class VideoGame implements Serializable{
 	}
 
 	// Accesseurs
+	
+	
+	public int getIdVideoGame() {
+		return idVideoGame;
+	}
+
+	public void setIdVideoGame(int idVideoGame) {
+		this.idVideoGame = idVideoGame;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -40,11 +62,11 @@ public class VideoGame implements Serializable{
 		this.name = name;
 	}
 
-	public String getCreditCost() {
+	public int getCreditCost() {
 		return creditCost;
 	}
 
-	public void setCreditCost(String creditCost) {
+	public void setCreditCost(int creditCost) {
 		this.creditCost = creditCost;
 	}
 
@@ -62,6 +84,13 @@ public class VideoGame implements Serializable{
 	}
 
 	public void SelectBooking() {
+	}
+	
+	public static ArrayList<VideoGame> GetAllVideoGame()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		return VideoGameDAO.GetAll();
 	}
 
 	// Methode de base

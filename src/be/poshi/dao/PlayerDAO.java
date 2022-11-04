@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 //import java.time.ZoneId;
+import java.util.ArrayList;
 
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Player;
@@ -103,6 +104,12 @@ public class PlayerDAO extends DAO<Player> {
 			e.printStackTrace();
 		}
 		return isValid;
+	}
+
+	@Override
+	public ArrayList<Player> GetAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

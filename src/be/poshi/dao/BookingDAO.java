@@ -1,6 +1,7 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.poshi.pojo.Booking;
 
@@ -27,6 +28,12 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public Booking find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Booking> GetAll() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

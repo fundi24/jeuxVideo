@@ -3,6 +3,7 @@ package be.poshi.dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Administrator;
@@ -62,5 +63,11 @@ public class UserDAO extends DAO<User> {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	@Override
+	public ArrayList<User> GetAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

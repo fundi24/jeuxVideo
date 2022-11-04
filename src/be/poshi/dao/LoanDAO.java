@@ -1,6 +1,7 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.poshi.pojo.Loan;
 
@@ -27,6 +28,12 @@ public class LoanDAO extends DAO<Loan> {
 
 	@Override
 	public Loan find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Loan> GetAll() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

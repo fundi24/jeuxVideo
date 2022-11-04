@@ -1,6 +1,7 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.poshi.pojo.Copy;
 
@@ -27,6 +28,12 @@ public class CopyDAO extends DAO<Copy> {
 
 	@Override
 	public Copy find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Copy> GetAll() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
