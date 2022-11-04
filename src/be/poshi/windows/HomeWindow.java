@@ -81,7 +81,7 @@ public class HomeWindow extends JFrame {
 		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
 		BtnGetGameCatalogue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GetCatalogueWindow GCW = new GetCatalogueWindow();
+				GetCatalogueWindow GCW = new GetCatalogueWindow(connectedUser);
 				GCW.setVisible(true);
 				dispose();
 			}
