@@ -102,6 +102,11 @@ public class Player extends User {
 		DAO<Player> PlayerDAO = adf.getPlayerDAO();
 		return PlayerDAO.create(this);
 	}
+	
+	public boolean HasReceivedBirthdayGift() throws Exception
+	{
+		return PlayerDAO.HasReceivedBirthdayGift(this);
+	}
 
 	// Methode de base
 	@Override

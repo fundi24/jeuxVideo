@@ -9,6 +9,8 @@ import java.time.LocalDate;
 //import java.time.ZoneId;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Player;
 
@@ -51,15 +53,35 @@ public class PlayerDAO extends DAO<Player> {
 	@Override
 	public boolean update(Player obj) {
 		boolean success=false;
-		String query="UPDATE User SET Credit="+obj.getCredit()+" WHERE IdUser="+obj.getIdUser();
-		try {
-			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-	        pstmt.executeUpdate();
-	        pstmt.close();
-	        success=true;
+		LocalDate today = LocalDate.now();
+		
+		String query="UPDATE User SET Credit='"+obj.getCredit()+"', ReceivedBirthdayGift = true WHERE IdUser='"+obj.getIdUser()+"'";
+		String query2="UPDATE User SET ReceivedBirthdayGift = false WHERE IdUser='"+obj.getIdUser()+"'";
+		
+		if(today.isEqual(obj.getDateOfBirth()))
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+		        pstmt.executeUpdate();
+		        pstmt.close();
+		        success=true;
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			
 		}
-		catch(SQLException e){
-			e.printStackTrace();
+		else
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query2);
+		        pstmt.executeUpdate();
+		        pstmt.close();
+		        success=true;
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
 		}
 		
 		return success; 
@@ -110,6 +132,31 @@ public class PlayerDAO extends DAO<Player> {
 	public ArrayList<Player> GetAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public static boolean HasReceivedBirthdayGift(Player player) throws Exception
+	{
+		boolean received = false;
+		int id = player.getIdUser();
+		
+		Connection conn = DatabaseConnection.getInstance();
+		String query = "SELECT * FROM User WHERE IdUser='" + id + "'";
+		try {
+			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				boolean isReceived = result.getBoolean("ReceivedBirthdayGift");
+				if(isReceived == true)
+				{
+					received = true;
+					throw new Exception("The gift has already been given !");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return received;
 	}
 
 }

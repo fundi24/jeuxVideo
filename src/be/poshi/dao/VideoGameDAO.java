@@ -30,24 +30,40 @@ public class VideoGameDAO extends DAO<VideoGame> {
 
 	@Override
 	public VideoGame find(int id) {
-		return null;
+		VideoGame videoGame = null;
+		
+		String query = "SELECT * FROM ((VideoGame INNER JOIN Version ON VideoGame.IdVersion = Version.IdVersion) INNER JOIN Console on Version.IdConsole = Console.IdConsole) WHERE VideoGame.IdVideoGame = '" + id + "'";
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) { 
+				videoGame = new VideoGame();
+				videoGame.setIdVideoGame(result.getInt("IdVideoGame"));
+				videoGame.setName(result.getString("VideoGameName"));
+				videoGame.setCreditCost(result.getInt("CreditCost"));
+				videoGame.setConsole(result.getString("ConsoleName"));
+				videoGame.setVersion(result.getString("VersionName"));
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return videoGame;
+		
 	}
 
 	@Override
 	public ArrayList<VideoGame> GetAll(){
 		ArrayList<VideoGame> videoGames = new ArrayList<VideoGame>();
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		
-		String query = "SELECT * FROM ((VideoGame INNER JOIN Version ON VideoGame.IdVersion = Version.IdVersion) INNER JOIN Console on Version.IdConsole = Console.IdConsole)";
+		String query = "SELECT * FROM VideoGame";
 		try {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery(query);
-			while (result.next()) { //utiliser le find
-				VideoGame vg = new VideoGame();
-				vg.setIdVideoGame(result.getInt("IdVideoGame"));
-				vg.setName(result.getString("VideoGameName"));
-				vg.setCreditCost(result.getInt("CreditCost"));
-				vg.setConsole(result.getString("ConsoleName"));
-				vg.setVersion(result.getString("VersionName"));
+			while (result.next()) {
+				int id = result.getInt("IdVideoGame");
+				VideoGame vg = VideoGameDAO.find(id);
 				videoGames.add(vg);
 			} 
 		} catch (SQLException e) {

@@ -90,18 +90,8 @@ public class HomeWindow extends JFrame {
 		contentPane.add(BtnGetGameCatalogue);
 
 
-		if (connectedUser instanceof Administrator) {
+		if (connectedUser instanceof Administrator) {			
 			LblPseudo.setText("Admin");
-			JButton BtnAddVideoGame = new JButton("Add a video game");
-			BtnAddVideoGame.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					AddAVideoGameWindow AAVGW = new AddAVideoGameWindow(connectedUser);
-					AAVGW.setVisible(true);
-					dispose();
-				}
-			});
-			BtnAddVideoGame.setBounds(10, 65, 139, 21);
-			contentPane.add(BtnAddVideoGame);
 
 		}
 		if (connectedUser instanceof Player) {
@@ -117,11 +107,25 @@ public class HomeWindow extends JFrame {
 			JButton BtnGetBirthdayGift = new JButton("Get birthday gift");
 			BtnGetBirthdayGift.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*LocalDate today = LocalDate.now();
-					if(today.isEqual(player.getDateOfBirth()))
-					{
-						player.AddBirthdayBonus();
-					}*/
+					try {
+						LocalDate today = LocalDate.now();
+						boolean ReceivedBirthdayGift = player.HasReceivedBirthdayGift();
+						if(today.isEqual(player.getDateOfBirth()))
+						{
+							if(ReceivedBirthdayGift == false)
+							{
+								player.AddBirthdayBonus();
+								JOptionPane.showMessageDialog(null, "You have received your credits, happy birthday !");
+							}
+						}
+						else
+						{
+							throw new Exception("It's not your birthday !");
+						}
+					}catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getMessage());
+					}
+
 				}
 			});
 			BtnGetBirthdayGift.setBounds(275, 163, 150, 21);
