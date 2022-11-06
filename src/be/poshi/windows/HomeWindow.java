@@ -108,31 +108,7 @@ public class HomeWindow extends JFrame {
 			JButton BtnGetBirthdayGift = new JButton("Get birthday gift");
 			BtnGetBirthdayGift.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						LocalDate birthday = player.getDateOfBirth();
-						int dayBirthday = birthday.getDayOfMonth();
-						Month monthBirthday = birthday.getMonth();
-						LocalDate today = LocalDate.now();
-						int day = today.getDayOfMonth();
-						Month month = today.getMonth();
-						if(day == dayBirthday && month == monthBirthday)
-						{
-							boolean ReceivedBirthdayGift = player.HasReceivedBirthdayGift();
-							if(ReceivedBirthdayGift == false)
-							{
-								player.AddBirthdayBonus();
-								JOptionPane.showMessageDialog(null, "You have received your credits, happy birthday !");
-							}
-						}
-						else
-						{
-							player.AddBirthdayBonus();
-							throw new Exception("It's not your birthday !");
-						}
-					}catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, ex.getMessage());
-					}
-
+					player.AddBirthdayBonus();
 				}
 			});
 			BtnGetBirthdayGift.setBounds(275, 163, 150, 21);

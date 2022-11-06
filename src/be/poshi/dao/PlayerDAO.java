@@ -53,7 +53,7 @@ public class PlayerDAO extends DAO<Player> {
 	@Override
 	public boolean update(Player obj) {
 		boolean success=false;
-		
+
 		LocalDate birthday = obj.getDateOfBirth();
 		int dayBirthday = birthday.getDayOfMonth();
 		Month monthBirthday = birthday.getMonth();
@@ -67,10 +67,15 @@ public class PlayerDAO extends DAO<Player> {
 		if(day == dayBirthday && month == monthBirthday)
 		{
 			try {
-				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-		        pstmt.executeUpdate();
-		        pstmt.close();
-		        success=true;
+				boolean ReceivedBirthdayGift = PlayerDAO.HasReceivedBirthdayGift(obj);
+				if(ReceivedBirthdayGift == false)
+				{
+					PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			        pstmt.executeUpdate();
+			        pstmt.close();
+			        success=true;
+					JOptionPane.showMessageDialog(null, "You have received your credits, happy birthday !");
+				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
@@ -84,6 +89,7 @@ public class PlayerDAO extends DAO<Player> {
 		        pstmt.executeUpdate();
 		        pstmt.close();
 		        success=true;
+				JOptionPane.showMessageDialog(null, "It's not your birthday !");
 			}
 			catch(SQLException e){
 				e.printStackTrace();
@@ -114,6 +120,12 @@ public class PlayerDAO extends DAO<Player> {
 		return player;
 	}
 	
+	@Override
+	public ArrayList<Player> GetAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public static boolean CheckIfUsernameIsAvailable(String username) throws Exception
 	{
 		boolean isValid = true;
@@ -131,14 +143,8 @@ public class PlayerDAO extends DAO<Player> {
 		}
 		return isValid;
 	}
-
-	@Override
-	public ArrayList<Player> GetAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
-	public static boolean HasReceivedBirthdayGift(Player player) throws Exception
+	public static boolean HasReceivedBirthdayGift(Player player)
 	{
 		boolean received = false;
 		int id = player.getIdUser();
@@ -153,8 +159,7 @@ public class PlayerDAO extends DAO<Player> {
 				if(isReceived == true)
 				{
 					received = true;
-					throw new Exception("The gift has already been given !");
-				}
+					JOptionPane.showMessageDialog(null, "The gift has already been given !");				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
