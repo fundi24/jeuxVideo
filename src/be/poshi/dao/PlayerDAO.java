@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-//import java.time.ZoneId;
+import java.time.Month;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -53,12 +53,18 @@ public class PlayerDAO extends DAO<Player> {
 	@Override
 	public boolean update(Player obj) {
 		boolean success=false;
+		
+		LocalDate birthday = obj.getDateOfBirth();
+		int dayBirthday = birthday.getDayOfMonth();
+		Month monthBirthday = birthday.getMonth();
 		LocalDate today = LocalDate.now();
+		int day = today.getDayOfMonth();
+		Month month = today.getMonth();
 		
 		String query="UPDATE User SET Credit='"+obj.getCredit()+"', ReceivedBirthdayGift = true WHERE IdUser='"+obj.getIdUser()+"'";
 		String query2="UPDATE User SET ReceivedBirthdayGift = false WHERE IdUser='"+obj.getIdUser()+"'";
 		
-		if(today.isEqual(obj.getDateOfBirth()))
+		if(day == dayBirthday && month == monthBirthday)
 		{
 			try {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
@@ -99,10 +105,8 @@ public class PlayerDAO extends DAO<Player> {
 				player.setIdUser(id);
 				player.setPseudo(result.getString("Pseudo"));
 				player.setCredit(result.getInt("Credit"));
-				/*LocalDate DOB = result.getDate("DateOfBirth").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				player.setDateOfBirth(DOB);
-				LocalDate RegistrationDate = result.getDate("RegistrationDate").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				player.setRegistrationDate(RegistrationDate);*/
+				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
+				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

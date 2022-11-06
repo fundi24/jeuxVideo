@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.Month;
 import java.awt.event.ActionEvent;
 
 public class HomeWindow extends JFrame {
@@ -108,10 +109,15 @@ public class HomeWindow extends JFrame {
 			BtnGetBirthdayGift.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
+						LocalDate birthday = player.getDateOfBirth();
+						int dayBirthday = birthday.getDayOfMonth();
+						Month monthBirthday = birthday.getMonth();
 						LocalDate today = LocalDate.now();
-						boolean ReceivedBirthdayGift = player.HasReceivedBirthdayGift();
-						if(today.isEqual(player.getDateOfBirth()))
+						int day = today.getDayOfMonth();
+						Month month = today.getMonth();
+						if(day == dayBirthday && month == monthBirthday)
 						{
+							boolean ReceivedBirthdayGift = player.HasReceivedBirthdayGift();
 							if(ReceivedBirthdayGift == false)
 							{
 								player.AddBirthdayBonus();
@@ -120,6 +126,7 @@ public class HomeWindow extends JFrame {
 						}
 						else
 						{
+							player.AddBirthdayBonus();
 							throw new Exception("It's not your birthday !");
 						}
 					}catch (Exception ex) {
