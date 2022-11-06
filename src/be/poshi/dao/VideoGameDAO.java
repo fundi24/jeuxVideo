@@ -54,8 +54,6 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	@Override
 	public ArrayList<VideoGame> GetAll(){
 		ArrayList<VideoGame> videoGames = new ArrayList<VideoGame>();
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		
 		String query = "SELECT * FROM VideoGame";
 		try {
@@ -63,7 +61,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 					.executeQuery(query);
 			while (result.next()) {
 				int id = result.getInt("IdVideoGame");
-				VideoGame vg = VideoGameDAO.find(id);
+				VideoGame vg = find(id);
 				videoGames.add(vg);
 			} 
 		} catch (SQLException e) {

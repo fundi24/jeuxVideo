@@ -67,7 +67,7 @@ public class PlayerDAO extends DAO<Player> {
 		if(day == dayBirthday && month == monthBirthday)
 		{
 			try {
-				boolean ReceivedBirthdayGift = PlayerDAO.HasReceivedBirthdayGift(obj);
+				boolean ReceivedBirthdayGift = HasReceivedBirthdayGift(obj);
 				if(ReceivedBirthdayGift == false)
 				{
 					PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
