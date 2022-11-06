@@ -91,7 +91,7 @@ public class Player extends User {
 			PlayerDAO.update(this);
 	}
 	
-	public static boolean CheckIfUsernameIsAvailable(String username) throws Exception 
+	public static boolean CheckIfUsernameIsAvailable(String username)
 	{
 		return PlayerDAO.CheckIfUsernameIsAvailable(username);
 	}

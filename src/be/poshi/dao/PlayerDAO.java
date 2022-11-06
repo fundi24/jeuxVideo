@@ -126,7 +126,7 @@ public class PlayerDAO extends DAO<Player> {
 		return null;
 	}
 	
-	public static boolean CheckIfUsernameIsAvailable(String username) throws Exception
+	public static boolean CheckIfUsernameIsAvailable(String username)
 	{
 		boolean isValid = true;
 		Connection conn = DatabaseConnection.getInstance();
@@ -136,8 +136,8 @@ public class PlayerDAO extends DAO<Player> {
 					.executeQuery(query);
 			if (result.first()) {
 				isValid = false;
-				throw new Exception("Username is already used !");
-			}
+				JOptionPane.showMessageDialog(null, "Username is already used !");
+				}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
