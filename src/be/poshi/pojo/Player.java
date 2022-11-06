@@ -85,7 +85,7 @@ public class Player extends User {
 	}
 
 	public void AddBirthdayBonus() {
-			credit = credit + 2;
+			//credit = credit + 2;
 			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 			DAO<Player> PlayerDAO = adf.getPlayerDAO();
 			PlayerDAO.update(this);
