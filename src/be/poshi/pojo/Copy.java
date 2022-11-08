@@ -17,8 +17,7 @@ public class Copy implements Serializable {
 	private Player owner;
 
 	// Constructeurs
-	public Copy(int idCopy, VideoGame videoGame, Loan loan, Player owner) {
-		this.idCopy = idCopy;
+	public Copy(VideoGame videoGame, Loan loan, Player owner) {
 		this.videoGame = videoGame;
 		this.loan = loan;
 		this.owner = owner;
@@ -28,7 +27,7 @@ public class Copy implements Serializable {
 		this.videoGame = videoGame;
 		this.owner = owner;
 	}
-	
+
 	// Accesseurs
 	public int getIdCopy() {
 		return idCopy;
@@ -72,23 +71,15 @@ public class Copy implements Serializable {
 	public Boolean IsAvailable() {
 		return false;
 	}
-	
-	public boolean CreateACopy()
-	{
+
+	public boolean CreateACopy() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 		return CopyDAO.create(this);
 	}
-	
-	public static ArrayList<Copy> GetAllMyCopies(Player player)
-	{
-		return CopyDAO.GetAllMyCopies(player);
-	}
 
-	// Methode de base
-	@Override
-	public String toString() {
-		return "Copy [IdCopy = " + idCopy + ",videoGame=" + videoGame + ", loan=" + loan + ", owner=" + owner + "]";
+	public static ArrayList<Copy> GetAllMyCopies(Player player) {
+		return CopyDAO.GetAllMyCopies(player);
 	}
 
 }

@@ -3,7 +3,7 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Booking implements Serializable{
+public class Booking implements Serializable {
 
 	// Attributs
 	private static final long serialVersionUID = -2547447650772941403L;
@@ -12,16 +12,8 @@ public class Booking implements Serializable{
 	private Player player;
 	private VideoGame videoGame;
 
-	// Constructeurs
-	public Booking(int idBooking, Player player, VideoGame videoGame) {
-		this.idBooking = idBooking;
-		this.player = player;
-		this.videoGame = videoGame;
-	}
-
-	public Booking(int idBooking, LocalDate bookingDate, Player player, VideoGame videoGame) {
-		this.idBooking = idBooking;
-		this.bookingDate = bookingDate;
+	// Constructeur
+	public Booking(Player player, VideoGame videoGame) {
 		this.player = player;
 		this.videoGame = videoGame;
 	}
@@ -35,14 +27,32 @@ public class Booking implements Serializable{
 		this.bookingDate = bookingDate;
 	}
 
-	// Methodes supplementaires
-	public void Delete() {
+	public int getIdBooking() {
+		return idBooking;
 	}
 
-	// Methode de base
-	@Override
-	public String toString() {
-		return "Booking [idBooking=" + idBooking+ "bookingDate=" + bookingDate + ", player=" + player + ", videoGame=" + videoGame + "]";
+	public void setIdBooking(int idBooking) {
+		this.idBooking = idBooking;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public VideoGame getVideoGame() {
+		return videoGame;
+	}
+
+	public void setVideoGame(VideoGame videoGame) {
+		this.videoGame = videoGame;
+	}
+
+	// Methodes supplementaires
+	public void Delete() {
 	}
 
 }

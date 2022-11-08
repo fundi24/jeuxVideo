@@ -3,7 +3,7 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Loan implements Serializable{
+public class Loan implements Serializable {
 
 	// Attributs
 	private static final long serialVersionUID = 8365143624293081836L;
@@ -15,22 +15,11 @@ public class Loan implements Serializable{
 	private Player lender;
 	private Player borrower;
 
-	// Constructeurs
-	public Loan(int idLoan, Copy copy, Player lender, Player borrower) {
-		this.idLoan = idLoan;
+	// Constructeur
+	public Loan(Copy copy, Player lender, Player borrower) {
 		this.copy = copy;
 		this.lender = lender;
 		this.borrower = borrower;
-	}
-
-	public Loan(int idLoan, Copy copy, Player lender, Player borrower, LocalDate startDate, LocalDate endDate, Boolean ongoing) {
-		this.idLoan = idLoan;
-		this.copy = copy;
-		this.lender = lender;
-		this.borrower = borrower;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.ongoing = ongoing;
 	}
 
 	// Accesseurs
@@ -58,18 +47,43 @@ public class Loan implements Serializable{
 		this.ongoing = ongoing;
 	}
 
+	public int getIdLoan() {
+		return idLoan;
+	}
+
+	public void setIdLoan(int idLoan) {
+		this.idLoan = idLoan;
+	}
+
+	public Copy getCopy() {
+		return copy;
+	}
+
+	public void setCopy(Copy copy) {
+		this.copy = copy;
+	}
+
+	public Player getLender() {
+		return lender;
+	}
+
+	public void setLender(Player lender) {
+		this.lender = lender;
+	}
+
+	public Player getBorrower() {
+		return borrower;
+	}
+
+	public void setBorrower(Player borrower) {
+		this.borrower = borrower;
+	}
+
 	// Methodes supplementaires
 	public void CalculateBalance() {
 	}
 
 	public void EndLoan() {
-	}
-
-	// Methode de base
-	@Override
-	public String toString() {
-		return "Loan [idLoan=" + idLoan + ", startDate=" + startDate + ", endDate=" + endDate + ", ongoing=" + ongoing
-				+ ", copy=" + copy + ", lender=" + lender + ", borrower=" + borrower + "]";
 	}
 
 }

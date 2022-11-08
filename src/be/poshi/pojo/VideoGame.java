@@ -7,7 +7,7 @@ import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
 import be.poshi.dao.VideoGameDAO;
 
-public class VideoGame implements Serializable{
+public class VideoGame implements Serializable {
 
 	// Attributs
 	private static final long serialVersionUID = 5171965949662273923L;
@@ -19,25 +19,14 @@ public class VideoGame implements Serializable{
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 
-	// Constructeurs
+	// Constructeur
 	public VideoGame() {
 		bookings = new ArrayList<Booking>();
 		copies = new ArrayList<Copy>();
 	}
 
-	public VideoGame(int idVideoGame, String name, int creditCost, String version, String console) {
-		this.idVideoGame = idVideoGame;
-		this.name = name;
-		this.creditCost = creditCost;
-		this.version = version;
-		this.console = console;
-		bookings = new ArrayList<Booking>();
-		copies = new ArrayList<Copy>();
-	}
-
 	// Accesseurs
-	
-	
+
 	public int getIdVideoGame() {
 		return idVideoGame;
 	}
@@ -53,7 +42,7 @@ public class VideoGame implements Serializable{
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -78,6 +67,22 @@ public class VideoGame implements Serializable{
 		this.console = console;
 	}
 
+	public ArrayList<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(ArrayList<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public ArrayList<Copy> getCopies() {
+		return copies;
+	}
+
+	public void setCopies(ArrayList<Copy> copies) {
+		this.copies = copies;
+	}
+
 	// Methodes supplementaires
 	public Copy CopyAvailable() {
 		return null;
@@ -85,39 +90,27 @@ public class VideoGame implements Serializable{
 
 	public void SelectBooking() {
 	}
-	
-	public static ArrayList<VideoGame> GetAllVideoGame()
-	{
+
+	public static ArrayList<VideoGame> GetAllVideoGame() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.GetAll();
 	}
-	
-	public int GetIdFromDb()
-	{
+
+	public int GetIdFromDb() {
 		return VideoGameDAO.GetId(this);
 	}
-	
-	public boolean UpdateCredit()
-	{
+
+	public boolean UpdateCredit() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.update(this);
 	}
-	
-	public boolean Delete()
-	{
+
+	public boolean Delete() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.delete(this);
 	}
 
-	// Methode de base
-	@Override
-	public String toString() {
-		return "VideoGame [idVideoGame=" + idVideoGame + ", name=" + name + ", creditCost=" + creditCost + ", console="
-				+ console + ", version=" + version + ", bookings=" + bookings + ", copies=" + copies + "]";
-	}
-	
-	
 }

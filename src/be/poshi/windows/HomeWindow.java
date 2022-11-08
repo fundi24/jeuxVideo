@@ -90,14 +90,13 @@ public class HomeWindow extends JFrame {
 		BtnGetGameCatalogue.setBounds(10, 150, 139, 21);
 		contentPane.add(BtnGetGameCatalogue);
 
-
 		if (connectedUser instanceof Administrator) {			
 			LblPseudo.setText("Admin");
 			
 		}
 		if (connectedUser instanceof Player) {
 			Player player = (Player) user;
-			
+						
 			LblCredit = new JLabel("Credit");
 			LblCredit.setBounds(325, 24, 72, 13);
 			contentPane.add(LblCredit);

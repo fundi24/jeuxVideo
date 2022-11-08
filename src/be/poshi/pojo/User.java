@@ -12,18 +12,12 @@ public abstract class User implements Serializable {
 	private String username;
 	private String password;
 
-	// Constructeurs
+	// Constructeur
 	public User() {
 	}
 
-	public User(int idUser, String username, String password) {
-		this.idUser = idUser;
-		this.username = username;
-		this.password = password;
-	}
-
 	// Accesseurs
-	
+
 	public int getIdUser() {
 		return idUser;
 	}
@@ -31,11 +25,10 @@ public abstract class User implements Serializable {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -52,12 +45,6 @@ public abstract class User implements Serializable {
 	// Methodes supplementaires
 	public static User Login(String username, String password) throws Exception {
 		return UserDAO.Login(username, password);
-	}
-
-	// Methode de base
-	@Override
-	public String toString() {
-		return "User [idUser=" + idUser + ", username=" + username + ", password=" + password + "]";
 	}
 
 }
