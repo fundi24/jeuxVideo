@@ -2,6 +2,9 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
+
 public class Copy implements Serializable {
 
 	// Attributs
@@ -19,9 +22,41 @@ public class Copy implements Serializable {
 		this.owner = owner;
 	}
 
-	public Copy(int idCopy, VideoGame videoGame, Player owner) {
-		this.idCopy = idCopy;
+	public Copy(VideoGame videoGame, Player owner) {
 		this.videoGame = videoGame;
+		this.owner = owner;
+	}
+	
+	// Accesseurs
+	public int getIdCopy() {
+		return idCopy;
+	}
+
+	public void setIdCopy(int idCopy) {
+		this.idCopy = idCopy;
+	}
+
+	public VideoGame getVideoGame() {
+		return videoGame;
+	}
+
+	public void setVideoGame(VideoGame videoGame) {
+		this.videoGame = videoGame;
+	}
+
+	public Loan getLoan() {
+		return loan;
+	}
+
+	public void setLoan(Loan loan) {
+		this.loan = loan;
+	}
+
+	public Player getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
 
@@ -34,6 +69,13 @@ public class Copy implements Serializable {
 
 	public Boolean IsAvailable() {
 		return false;
+	}
+	
+	public boolean CreateACopy()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> CopyDAO = adf.getCopyDAO();
+		return CopyDAO.create(this);
 	}
 
 	// Methode de base

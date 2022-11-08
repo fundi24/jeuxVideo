@@ -76,10 +76,43 @@ public class Player extends User {
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+	
+	
+	public ArrayList<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(ArrayList<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public ArrayList<Copy> getCopies() {
+		return copies;
+	}
+
+	public void setCopies(ArrayList<Copy> copies) {
+		this.copies = copies;
+	}
+
+	public ArrayList<Loan> getLoans() {
+		return loans;
+	}
+
+	public void setLoans(ArrayList<Loan> loans) {
+		this.loans = loans;
+	}
+
+	public ArrayList<Loan> getBorrowings() {
+		return borrowings;
+	}
+
+	public void setBorrowings(ArrayList<Loan> borrowings) {
+		this.borrowings = borrowings;
+	}
+	
+	
 
 	// Methodes supplementaires
-	
-	
 	public boolean LoanAllowend() { 
 		return false;
 	}
