@@ -97,6 +97,13 @@ public class VideoGame implements Serializable{
 	{
 		return VideoGameDAO.GetId(this);
 	}
+	
+	public boolean UpdateCredit()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		return VideoGameDAO.update(this);
+	}
 
 	// Methode de base
 	@Override
