@@ -24,7 +24,20 @@ public class VideoGameDAO extends DAO<VideoGame> {
 
 	@Override
 	public boolean delete(VideoGame obj) {
-		return false;
+		boolean success = false;
+
+		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
+
+		try {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			pstmt.executeUpdate();
+			pstmt.close();
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return success;
 	}
 
 	@Override

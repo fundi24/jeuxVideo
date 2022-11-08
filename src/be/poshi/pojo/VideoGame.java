@@ -93,7 +93,7 @@ public class VideoGame implements Serializable{
 		return VideoGameDAO.GetAll();
 	}
 	
-	public int GetId()
+	public int GetIdFromDb()
 	{
 		return VideoGameDAO.GetId(this);
 	}
@@ -103,6 +103,13 @@ public class VideoGame implements Serializable{
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.update(this);
+	}
+	
+	public boolean Delete()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		return VideoGameDAO.delete(this);
 	}
 
 	// Methode de base
