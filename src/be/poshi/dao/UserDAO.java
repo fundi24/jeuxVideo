@@ -58,7 +58,7 @@ public class UserDAO extends DAO<User> {
 				}
 			} else {
 				
-				throw new Exception("User not found !");
+				throw new Exception("Incorrect username or password !");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

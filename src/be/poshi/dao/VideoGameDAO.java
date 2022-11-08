@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.VideoGame;
 
 public class VideoGameDAO extends DAO<VideoGame> {
@@ -68,6 +69,27 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			e.printStackTrace();
 		}
 		return videoGames;
+	}
+	
+	public static int GetId(VideoGame videoGame)
+	{
+		int id=0;
+		
+		Connection conn = DatabaseConnection.getInstance();
+		
+		String query = "SELECT * FROM ((VideoGame INNER JOIN Version ON VideoGame.IdVersion = Version.IdVersion) INNER JOIN Console on Version.IdConsole = Console.IdConsole) WHERE VideoGame.VideoGameName ='" + videoGame.getName() + 
+				"' AND CreditCost ='" + videoGame.getCreditCost() + "'AND ConsoleName = '"+videoGame.getConsole()+"' AND VersionName ='"+ videoGame.getVersion()+"'" ;
+		try {
+			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) { 
+				id = result.getInt("IdVideoGame");
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return id;
 	}
 
 }

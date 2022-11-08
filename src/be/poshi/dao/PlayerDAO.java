@@ -79,23 +79,10 @@ public class PlayerDAO extends DAO<Player> {
 			        success=true;
 					JOptionPane.showMessageDialog(null, "You have received your credits, happy birthday !");
 				}
-				else
-				{
-					try {
-						PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-				        pstmt.executeUpdate();
-				        pstmt.close();
-				        success=true;
-					}
-					catch(SQLException e){
-						e.printStackTrace();
-					}
-				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-			
 		}
 		else
 		{

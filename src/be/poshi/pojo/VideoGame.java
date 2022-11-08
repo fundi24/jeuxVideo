@@ -92,6 +92,11 @@ public class VideoGame implements Serializable{
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.GetAll();
 	}
+	
+	public int GetId()
+	{
+		return VideoGameDAO.GetId(this);
+	}
 
 	// Methode de base
 	@Override
