@@ -62,7 +62,7 @@ public class PlayerDAO extends DAO<Player> {
 		Month month = today.getMonth();
 		
 		String query="UPDATE User SET Credit='"+obj.getCredit()+"', ReceivedBirthdayGift = true WHERE IdUser='"+obj.getIdUser()+"'";
-		String query2="UPDATE User SET Credit='"+obj.getCredit()+"',ReceivedBirthdayGift = false WHERE IdUser='"+obj.getIdUser()+"'";
+		String query2="UPDATE User SET ReceivedBirthdayGift = false WHERE IdUser='"+obj.getIdUser()+"'";
 		
 		if(day == dayBirthday && month == monthBirthday)
 		{
@@ -70,14 +70,10 @@ public class PlayerDAO extends DAO<Player> {
 				boolean ReceivedBirthdayGift = HasReceivedBirthdayGift(obj);
 				if(ReceivedBirthdayGift == false)
 				{
-					int credit = obj.getCredit();
-					int newCredit = credit+2;
-					obj.setCredit(newCredit);
 					PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			        pstmt.executeUpdate();
 			        pstmt.close();
 			        success=true;
-					JOptionPane.showMessageDialog(null, "You have received your credits, happy birthday !");
 				}
 			}
 			catch(SQLException e){
@@ -90,9 +86,7 @@ public class PlayerDAO extends DAO<Player> {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query2);
 		        pstmt.executeUpdate();
 		        pstmt.close();
-		        success=true;
-				JOptionPane.showMessageDialog(null, "It's not your birthday !");
-			}
+		        }
 			catch(SQLException e){
 				e.printStackTrace();
 			}
@@ -161,7 +155,7 @@ public class PlayerDAO extends DAO<Player> {
 				if(isReceived == true)
 				{
 					received = true;
-					JOptionPane.showMessageDialog(null, "The gift has already been given !");				}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

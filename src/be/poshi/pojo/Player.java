@@ -84,11 +84,11 @@ public class Player extends User {
 		return false;
 	}
 
-	public void AddBirthdayBonus() {
-			//credit = credit + 2;
+	public boolean AddBirthdayBonus() {
+			credit = credit + 2;
 			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 			DAO<Player> PlayerDAO = adf.getPlayerDAO();
-			PlayerDAO.update(this);
+			return PlayerDAO.update(this);
 	}
 	
 	public static boolean CheckIfUsernameIsAvailable(String username)

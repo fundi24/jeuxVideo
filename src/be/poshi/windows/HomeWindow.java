@@ -79,21 +79,20 @@ public class HomeWindow extends JFrame {
 		BtnLogout.setBounds(10, 163, 85, 21);
 		getContentPane().add(BtnLogout);
 
-		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
-		BtnGetGameCatalogue.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GetCatalogueWindow GCW = new GetCatalogueWindow(connectedUser);
-				GCW.setVisible(true);
-				dispose();
-			}
-		});
-		BtnGetGameCatalogue.setBounds(10, 114, 139, 21);
-		contentPane.add(BtnGetGameCatalogue);
-
 
 		if (connectedUser instanceof Administrator) {			
 			LblPseudo.setText("Admin");
-
+			
+			JButton BtnGetGameCatalogue = new JButton("See the catalogue");
+			BtnGetGameCatalogue.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GetCatalogueWindow GCW = new GetCatalogueWindow(connectedUser);
+					GCW.setVisible(true);
+					dispose();
+				}
+			});
+			BtnGetGameCatalogue.setBounds(10, 114, 139, 21);
+			contentPane.add(BtnGetGameCatalogue);
 		}
 		if (connectedUser instanceof Player) {
 			Player player = (Player) user;
@@ -105,14 +104,12 @@ public class HomeWindow extends JFrame {
 			LblPseudo.setText(player.getPseudo());
 			LblCredit.setText(player.getCredit() + " credit(s)");
 			
-			JButton BtnGetBirthdayGift = new JButton("Get birthday gift");
-			BtnGetBirthdayGift.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					player.AddBirthdayBonus();
-				}
-			});
-			BtnGetBirthdayGift.setBounds(275, 163, 150, 21);
-			contentPane.add(BtnGetBirthdayGift);
+			boolean success = player.AddBirthdayBonus();
+			if(success == true)
+			{
+				JOptionPane.showMessageDialog(this, "You received 2 credits for your birthday. Please log in again !");
+			}
+			
 		}
 
 	}
