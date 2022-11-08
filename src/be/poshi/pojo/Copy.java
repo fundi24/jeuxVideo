@@ -1,8 +1,10 @@
 package be.poshi.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.CopyDAO;
 import be.poshi.dao.DAO;
 
 public class Copy implements Serializable {
@@ -76,6 +78,11 @@ public class Copy implements Serializable {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 		return CopyDAO.create(this);
+	}
+	
+	public static ArrayList<Copy> GetAllMyCopies(Player player)
+	{
+		return CopyDAO.GetAllMyCopies(player);
 	}
 
 	// Methode de base

@@ -76,7 +76,7 @@ public class HomeWindow extends JFrame {
 				dispose();
 			}
 		});
-		BtnLogout.setBounds(10, 163, 85, 21);
+		BtnLogout.setBounds(10, 200, 139, 21);
 		getContentPane().add(BtnLogout);
 		
 		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
@@ -87,7 +87,7 @@ public class HomeWindow extends JFrame {
 				dispose();
 			}
 		});
-		BtnGetGameCatalogue.setBounds(10, 114, 139, 21);
+		BtnGetGameCatalogue.setBounds(10, 150, 139, 21);
 		contentPane.add(BtnGetGameCatalogue);
 
 
@@ -104,6 +104,17 @@ public class HomeWindow extends JFrame {
 
 			LblPseudo.setText(player.getPseudo());
 			LblCredit.setText(player.getCredit() + " credit(s)");
+			
+			JButton BtnMyGames = new JButton("My games");
+			BtnMyGames.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyGamesWindow MGW = new MyGamesWindow(connectedUser);
+					MGW.setVisible(true);
+					dispose();
+				}
+			});
+			BtnMyGames.setBounds(10, 100, 139, 21);
+			contentPane.add(BtnMyGames);
 			
 			boolean success = player.AddBirthdayBonus();
 			if(success == true)
