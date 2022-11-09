@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Copy;
+import be.poshi.pojo.Loan;
 import be.poshi.pojo.Player;
 import be.poshi.pojo.VideoGame;
 
@@ -22,9 +23,9 @@ public class CopyDAO extends DAO<Copy> {
 	@Override
 	public boolean create(Copy obj) {
 		boolean success = false;
-		
+
 		String query = "INSERT INTO Copy (IdVideoGame, IdUser) VALUES (?,?)";
-		
+
 		try {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			pstmt.setInt(1, obj.getVideoGame().getIdVideoGame());
@@ -50,30 +51,52 @@ public class CopyDAO extends DAO<Copy> {
 
 	@Override
 	public Copy find(int id) {
-		return null;
+		Copy copy = null;
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		DAO<Player> PlayerDAO = adf.getPlayerDAO();
+
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM Copy WHERE IdCopy = " + id);
+			if (result.first()) {
+				int idVideoGame = result.getInt("IdVideoGame");
+				int idUser = result.getInt("IdUser");
+				VideoGame vg = VideoGameDAO.find(idVideoGame);
+				Player playerOwner = PlayerDAO.find(idUser);
+				copy = new Copy(vg, playerOwner);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return copy;
 	}
 
 	@Override
 	public ArrayList<Copy> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public static ArrayList<Copy> GetAllMyCopies(Player player)
-	{
+
+	public static ArrayList<Copy> GetAllMyCopies(Player playerOwner) {
 		ArrayList<Copy> copies = new ArrayList<Copy>();
+
 		Connection conn = DatabaseConnection.getInstance();
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		DAO<Loan> LoanDAO = adf.getLoanDAO();
 
-		String query = "SELECT * FROM Copy WHERE IdUser = '"+player.getIdUser()+"'";
+		String query = "SELECT * FROM Copy LEFT JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE IdUser = '" + playerOwner.getIdUser() + "'";
+
 		try {
-			ResultSet result = conn
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
+			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
 			while (result.next()) {
 				int idVideoGame = result.getInt("IdVideoGame");
+				int idLoan = result.getInt("IdLoan");
 				VideoGame vg = VideoGameDAO.find(idVideoGame);
-				Copy copy = new Copy(vg, player);
+				Loan loan = LoanDAO.find(idLoan);
+				Copy copy = new Copy(vg, loan,playerOwner);
 				copies.add(copy);
 			}
 		} catch (SQLException e) {

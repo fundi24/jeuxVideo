@@ -68,7 +68,6 @@ public class UserDAO extends DAO<User> {
 
 	@Override
 	public ArrayList<User> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

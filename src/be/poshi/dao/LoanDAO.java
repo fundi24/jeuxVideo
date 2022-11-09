@@ -1,9 +1,13 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
+import be.poshi.pojo.Player;
 
 public class LoanDAO extends DAO<Loan> {
 
@@ -28,12 +32,37 @@ public class LoanDAO extends DAO<Loan> {
 
 	@Override
 	public Loan find(int id) {
-		return null;
+		Loan loan = null;
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Player> PlayerDAO = adf.getPlayerDAO();
+		DAO<Copy> CopyDAO = adf.getCopyDAO();
+
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM Loan LEFT JOIN Copy ON Copy.IdCopy = Loan.IdCopy  WHERE IdLoan = " + id);
+			if (result.first()) {
+				int idCopy = result.getInt("IdCopy");
+				int idUserBorrower = result.getInt("Loan.IdUser");
+				int idUserLender = result.getInt("Copy.IdUser");
+				
+				Player playerLender = PlayerDAO.find(idUserLender);
+				Player playerBorrower = PlayerDAO.find(idUserBorrower);
+				Copy copy = CopyDAO.find(idCopy);
+				
+				loan = new Loan(copy, playerLender, playerBorrower);
+				loan.setStartDate(result.getDate("StartDate").toLocalDate());
+				loan.setEndDate(result.getDate("EndDate").toLocalDate());
+				loan.setOngoing(result.getBoolean("OnGoing"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return loan;
 	}
 
 	@Override
 	public ArrayList<Loan> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

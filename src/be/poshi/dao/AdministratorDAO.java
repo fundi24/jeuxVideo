@@ -47,7 +47,6 @@ public class AdministratorDAO extends DAO<Administrator> {
 
 	@Override
 	public ArrayList<Administrator> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

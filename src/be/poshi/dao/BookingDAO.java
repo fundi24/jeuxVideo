@@ -33,7 +33,6 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public ArrayList<Booking> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

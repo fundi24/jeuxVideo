@@ -120,7 +120,6 @@ public class PlayerDAO extends DAO<Player> {
 	
 	@Override
 	public ArrayList<Player> GetAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -142,7 +141,7 @@ public class PlayerDAO extends DAO<Player> {
 		return isValid;
 	}
 	
-	public static boolean HasReceivedBirthdayGift(Player player)
+	public boolean HasReceivedBirthdayGift(Player player)
 	{
 		boolean received = false;
 		int id = player.getIdUser();
