@@ -76,7 +76,7 @@ public class HomeWindow extends JFrame {
 				dispose();
 			}
 		});
-		BtnLogout.setBounds(10, 200, 139, 21);
+		BtnLogout.setBounds(270, 150, 139, 21);
 		getContentPane().add(BtnLogout);
 		
 		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
@@ -87,7 +87,7 @@ public class HomeWindow extends JFrame {
 				dispose();
 			}
 		});
-		BtnGetGameCatalogue.setBounds(10, 150, 139, 21);
+		BtnGetGameCatalogue.setBounds(270, 100, 139, 21);
 		contentPane.add(BtnGetGameCatalogue);
 
 		if (connectedUser instanceof Administrator) {			
@@ -112,8 +112,49 @@ public class HomeWindow extends JFrame {
 					dispose();
 				}
 			});
-			BtnMyGames.setBounds(10, 100, 139, 21);
+			BtnMyGames.setBounds(10, 200, 139, 21);
 			contentPane.add(BtnMyGames);
+			
+			JButton BtnMybookings = new JButton("My bookings");
+			BtnMybookings.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					/*MyGamesWindow MGW = new MyGamesWindow(connectedUser);
+					MGW.setVisible(true);
+					dispose();*/
+				}
+			});
+			BtnMybookings.setBounds(10, 150, 139, 21);
+			contentPane.add(BtnMybookings);
+			
+			JButton BtnMyborrowings = new JButton("My borrowing");
+			BtnMyborrowings.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					/*MyGamesWindow MGW = new MyGamesWindow(connectedUser);
+					MGW.setVisible(true);
+					dispose();*/
+				}
+			});
+			BtnMyborrowings.setBounds(10, 100, 139, 21);
+			contentPane.add(BtnMyborrowings);
+			
+			if(player.getCredit() > 0)
+			{
+				JButton BtnBorrow = new JButton("Borrow");
+				BtnBorrow.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						BorrowWindow BW = new BorrowWindow(connectedUser);
+						BW.setVisible(true);
+						dispose();
+					}
+				});
+				BtnBorrow.setBounds(10, 50, 139, 21);
+				contentPane.add(BtnBorrow);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "You can only lend games  !");
+			}
+	
 			
 			boolean success = player.AddBirthdayBonus();
 			if(success == true)
