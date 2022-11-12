@@ -3,6 +3,9 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
+
 public class Booking implements Serializable {
 
 	// Attributs
@@ -57,6 +60,13 @@ public class Booking implements Serializable {
 	}
 
 	// Methodes supplementaires
+	public boolean MakeABooking()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Booking> BookingDAO = adf.getBookingDAO();
+		return BookingDAO.create(this);
+	}
+	
 	public void Delete() {
 	}
 

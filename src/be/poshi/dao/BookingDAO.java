@@ -1,6 +1,8 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +19,22 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public boolean create(Booking obj) {
-		return false;
+		boolean success = false;
+
+		String query = "INSERT INTO Booking (BookingDate, IdUser, IdVideoGame) VALUES (?,?,?)";
+
+		try {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			pstmt.setDate(1, Date.valueOf(obj.getBookingDate()));
+			pstmt.setInt(2, obj.getPlayer().getIdUser());
+			pstmt.setInt(3, obj.getVideoGame().getIdVideoGame());
+			pstmt.execute();
+			pstmt.close();
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return success;
 	}
 
 	@Override
