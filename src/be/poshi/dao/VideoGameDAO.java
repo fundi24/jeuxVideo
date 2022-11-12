@@ -25,19 +25,25 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	@Override
 	public boolean delete(VideoGame obj) { //verifier si il n'y a pas de copy du jeu
 		boolean success = false;
-
+		
 		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
 
-		try {
-			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-			pstmt.executeUpdate();
-			pstmt.close();
-			success = true;
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
+		boolean isValid = CheckForCopies(obj.getIdVideoGame());
+		if(isValid==true)
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+				pstmt.executeUpdate();
+				pstmt.close();
+				success = true;
+			} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 
+		}
+		
 		return success;
 	}
 
@@ -121,6 +127,23 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		}
 
 		return id;
+	}
+	
+	public boolean CheckForCopies(int id)
+	{
+		boolean isValid = true;
+		String query = "SELECT * FROM Copy WHERE IdVideoGame='" + id + "'";
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				isValid = false;
+				JOptionPane.showMessageDialog(null, "There is at least one copy of the game !");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isValid;
 	}
 
 }
