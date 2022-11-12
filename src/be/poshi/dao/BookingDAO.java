@@ -44,6 +44,8 @@ public class BookingDAO extends DAO<Booking> {
 				int idVideoGame = result.getInt("IdVideoGame");
 				VideoGame vg = VideoGameDAO.find(idVideoGame);
 				booking = new Booking(vg);
+				booking.setIdBooking(id);
+				booking.setBookingDate(result.getDate("BookingDate").toLocalDate());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

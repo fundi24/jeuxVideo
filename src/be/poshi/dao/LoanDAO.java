@@ -46,6 +46,7 @@ public class LoanDAO extends DAO<Loan> {
 				Copy copy = CopyDAO.find(idCopy);
 				
 				loan = new Loan(copy);
+				loan.setIdLoan(id);
 				loan.setStartDate(result.getDate("StartDate").toLocalDate());
 				loan.setEndDate(result.getDate("EndDate").toLocalDate());
 				loan.setOngoing(result.getBoolean("OnGoing"));

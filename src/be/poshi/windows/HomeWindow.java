@@ -118,9 +118,9 @@ public class HomeWindow extends JFrame {
 			JButton BtnMybookings = new JButton("My bookings");
 			BtnMybookings.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*MyGamesWindow MGW = new MyGamesWindow(connectedUser);
-					MGW.setVisible(true);
-					dispose();*/
+					MyBookingWindow MBW = new MyBookingWindow(connectedUser);
+					MBW.setVisible(true);
+					dispose();
 				}
 			});
 			BtnMybookings.setBounds(10, 150, 139, 21);
