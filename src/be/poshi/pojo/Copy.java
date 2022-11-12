@@ -27,6 +27,11 @@ public class Copy implements Serializable {
 		this.videoGame = videoGame;
 		this.owner = owner;
 	}
+	
+	public Copy(VideoGame videoGame) //A verifier !!!
+	{
+		this.videoGame = videoGame;
+	}
 
 	// Accesseurs
 	public int getIdCopy() {
@@ -76,10 +81,6 @@ public class Copy implements Serializable {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 		return CopyDAO.create(this);
-	}
-
-	public static ArrayList<Copy> GetAllMyCopies(Player player) {
-		return CopyDAO.GetAllMyCopies(player);
 	}
 
 }

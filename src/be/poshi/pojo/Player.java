@@ -100,13 +100,10 @@ public class Player extends User {
 	}
 
 	public boolean AddBirthdayBonus() {
+		//credit = credit + 2;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Player> PlayerDAO = adf.getPlayerDAO();
 		return PlayerDAO.update(this);
-	}
-
-	public static boolean CheckIfUsernameIsAvailable(String username) {
-		return PlayerDAO.CheckIfUsernameIsAvailable(username);
 	}
 
 	public boolean Register() {

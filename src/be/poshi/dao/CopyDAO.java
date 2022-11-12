@@ -54,7 +54,6 @@ public class CopyDAO extends DAO<Copy> {
 		Copy copy = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		DAO<Player> PlayerDAO = adf.getPlayerDAO();
 
 		try {
 			ResultSet result = this.connect
@@ -62,10 +61,8 @@ public class CopyDAO extends DAO<Copy> {
 					.executeQuery("SELECT * FROM Copy WHERE IdCopy = " + id);
 			if (result.first()) {
 				int idVideoGame = result.getInt("IdVideoGame");
-				int idUser = result.getInt("IdUser");
 				VideoGame vg = VideoGameDAO.find(idVideoGame);
-				Player playerOwner = PlayerDAO.find(idUser);
-				copy = new Copy(vg, playerOwner);
+				copy = new Copy(vg);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,33 +73,6 @@ public class CopyDAO extends DAO<Copy> {
 	@Override
 	public ArrayList<Copy> GetAll() {
 		return null;
-	}
-
-	public static ArrayList<Copy> GetAllMyCopies(Player playerOwner) {
-		ArrayList<Copy> copies = new ArrayList<Copy>();
-
-		Connection conn = DatabaseConnection.getInstance();
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		DAO<Loan> LoanDAO = adf.getLoanDAO();
-
-		String query = "SELECT * FROM Copy LEFT JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE IdUser = '" + playerOwner.getIdUser() + "'";
-
-		try {
-			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query);
-			while (result.next()) {
-				int idVideoGame = result.getInt("IdVideoGame");
-				int idLoan = result.getInt("IdLoan");
-				VideoGame vg = VideoGameDAO.find(idVideoGame);
-				Loan loan = LoanDAO.find(idLoan);
-				Copy copy = new Copy(vg, loan,playerOwner);
-				copies.add(copy);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return copies;
 	}
 
 }

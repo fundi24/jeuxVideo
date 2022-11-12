@@ -23,7 +23,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	}
 
 	@Override
-	public boolean delete(VideoGame obj) {
+	public boolean delete(VideoGame obj) { //verifier si il n'y a pas de copy du jeu
 		boolean success = false;
 
 		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
@@ -33,7 +33,8 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			pstmt.executeUpdate();
 			pstmt.close();
 			success = true;
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 

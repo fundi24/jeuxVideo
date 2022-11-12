@@ -21,6 +21,11 @@ public class Loan implements Serializable {
 		this.lender = lender;
 		this.borrower = borrower;
 	}
+	
+	public Loan(Copy copy)  //A verifier !!!
+	{
+		this.copy = copy;
+	}
 
 	// Accesseurs
 	public LocalDate getStartDate() {

@@ -129,9 +129,9 @@ public class HomeWindow extends JFrame {
 			JButton BtnMyborrowings = new JButton("My borrowing");
 			BtnMyborrowings.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*MyGamesWindow MGW = new MyGamesWindow(connectedUser);
-					MGW.setVisible(true);
-					dispose();*/
+					MyBorrowingWindow MBW = new MyBorrowingWindow(connectedUser);
+					MBW.setVisible(true);
+					dispose();
 				}
 			});
 			BtnMyborrowings.setBounds(10, 100, 139, 21);

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import be.poshi.connection.DatabaseConnection;
+import be.poshi.pojo.Booking;
 import be.poshi.pojo.Copy;
+import be.poshi.pojo.Loan;
 import be.poshi.pojo.Player;
 
 public class PlayerDAO extends DAO<Player> {
@@ -28,20 +30,25 @@ public class PlayerDAO extends DAO<Player> {
 		
 		String query = "INSERT INTO User (Username, Password, RegistrationDate, Pseudo, Credit, DateOfBirth, Administrator) VALUES (?,?,?,?,?,?,?)";
 		
-		try {
-			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-			pstmt.setString(1, obj.getUsername());
-			pstmt.setString(2, obj.getPassword());
-			pstmt.setDate(3, Date.valueOf(today));
-			pstmt.setString(4, obj.getPseudo());
-			pstmt.setInt(5, 10);
-			pstmt.setDate(6,Date.valueOf(obj.getDateOfBirth()));
-			pstmt.setBoolean(7, false);
-			pstmt.execute();
-			pstmt.close();
-			success = true;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		boolean isValid = CheckIfUsernameIsAvailable(obj.getUsername());
+		
+		if(isValid == true)
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+				pstmt.setString(1, obj.getUsername());
+				pstmt.setString(2, obj.getPassword());
+				pstmt.setDate(3, Date.valueOf(today));
+				pstmt.setString(4, obj.getPseudo());
+				pstmt.setInt(5, 10);
+				pstmt.setDate(6,Date.valueOf(obj.getDateOfBirth()));
+				pstmt.setBoolean(7, false);
+				pstmt.execute();
+				pstmt.close();
+				success = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return success;
 	}
@@ -61,9 +68,8 @@ public class PlayerDAO extends DAO<Player> {
 		LocalDate today = LocalDate.now();
 		int day = today.getDayOfMonth();
 		Month month = today.getMonth();
-		int newCredit = obj.getCredit()+2;
 		
-		String query="UPDATE User SET Credit='"+newCredit+"', ReceivedBirthdayGift = true WHERE IdUser='"+obj.getIdUser()+"'";
+		String query="UPDATE User SET Credit='"+obj.getCredit()+"', ReceivedBirthdayGift = true WHERE IdUser='"+obj.getIdUser()+"'";
 		String query2="UPDATE User SET ReceivedBirthdayGift = false WHERE IdUser='"+obj.getIdUser()+"'";
 		
 		if(day == dayBirthday && month == monthBirthday)
@@ -99,11 +105,12 @@ public class PlayerDAO extends DAO<Player> {
 
 	@Override
 	public Player find(int id) {
+
 		Player player = null;
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
+					.executeQuery("SELECT * FROM (((User LEFT JOIN Booking ON User.IdUser = Booking.IdUser) LEFT JOIN Copy ON User.IdUser = Copy.IdUser) LEFT JOIN Loan ON User.IdUser = Loan.IdUser) WHERE User.IdUser = " + id);
 			if (result.first()) {
 				player = new Player();
 				player.setIdUser(id);
@@ -111,6 +118,17 @@ public class PlayerDAO extends DAO<Player> {
 				player.setCredit(result.getInt("Credit"));
 				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
 				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
+				result.beforeFirst();
+				BookingDAO bookingDAO = new BookingDAO(this.connect);
+				CopyDAO copyDAO = new CopyDAO(this.connect);
+				LoanDAO loanDAO = new LoanDAO(this.connect);
+				while(result.next())
+				{
+					player.getCopies().add(copyDAO.find(result.getInt("IdCopy")));
+					player.getBookings().add(bookingDAO.find(result.getInt("IdBooking")));
+					player.getBorrowings().add(loanDAO.find(result.getInt("IdLoan")));
+					
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -123,13 +141,12 @@ public class PlayerDAO extends DAO<Player> {
 		return null;
 	}
 	
-	public static boolean CheckIfUsernameIsAvailable(String username)
+	public boolean CheckIfUsernameIsAvailable(String username)
 	{
 		boolean isValid = true;
-		Connection conn = DatabaseConnection.getInstance();
 		String query = "SELECT * FROM User WHERE Username='" + username + "'";
 		try {
-			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery(query);
 			if (result.first()) {
 				isValid = false;
@@ -146,10 +163,9 @@ public class PlayerDAO extends DAO<Player> {
 		boolean received = false;
 		int id = player.getIdUser();
 		
-		Connection conn = DatabaseConnection.getInstance();
 		String query = "SELECT * FROM User WHERE IdUser='" + id + "'";
 		try {
-			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery(query);
 			if (result.first()) {
 				boolean isReceived = result.getBoolean("ReceivedBirthdayGift");

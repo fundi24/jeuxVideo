@@ -34,23 +34,18 @@ public class LoanDAO extends DAO<Loan> {
 	public Loan find(int id) {
 		Loan loan = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Player> PlayerDAO = adf.getPlayerDAO();
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM Loan LEFT JOIN Copy ON Copy.IdCopy = Loan.IdCopy  WHERE IdLoan = " + id);
+					.executeQuery("SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = " + id);
 			if (result.first()) {
 				int idCopy = result.getInt("IdCopy");
-				int idUserBorrower = result.getInt("Loan.IdUser");
-				int idUserLender = result.getInt("Copy.IdUser");
-				
-				Player playerLender = PlayerDAO.find(idUserLender);
-				Player playerBorrower = PlayerDAO.find(idUserBorrower);
+
 				Copy copy = CopyDAO.find(idCopy);
 				
-				loan = new Loan(copy, playerLender, playerBorrower);
+				loan = new Loan(copy);
 				loan.setStartDate(result.getDate("StartDate").toLocalDate());
 				loan.setEndDate(result.getDate("EndDate").toLocalDate());
 				loan.setOngoing(result.getBoolean("OnGoing"));
