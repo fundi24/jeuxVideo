@@ -108,11 +108,11 @@ public class PlayerDAO extends DAO<Player> {
 
 		Player player = null;
 		
-		//Recuperer player et ses copies
+		//recuperer player
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User INNER JOIN Copy ON User.IdUser = Copy.IdUser WHERE User.IdUser = " + id);
+					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
 			if (result.first()) {
 				player = new Player();
 				player.setIdUser(id);
@@ -120,13 +120,21 @@ public class PlayerDAO extends DAO<Player> {
 				player.setCredit(result.getInt("Credit"));
 				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
 				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
-				result.beforeFirst();
-				CopyDAO copyDAO = new CopyDAO(this.connect);
-				while(result.next())
-				{
-					player.getCopies().add(copyDAO.find(result.getInt("IdCopy")));
-					
-				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//Recuperer ses copies
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM User INNER JOIN Copy ON User.IdUser = Copy.IdUser WHERE User.IdUser = " + id);
+			CopyDAO copyDAO = new CopyDAO(this.connect);
+			while(result.next())
+			{
+				player.getCopies().add(copyDAO.find(result.getInt("IdCopy")));
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

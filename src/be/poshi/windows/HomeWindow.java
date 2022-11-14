@@ -148,7 +148,7 @@ public class HomeWindow extends JFrame {
 			BtnMyborrowings.setBounds(10, 100, 139, 21);
 			contentPane.add(BtnMyborrowings);
 			
-			if(player.getCredit() > 0)
+			if(player.LoanAllowend() == true)
 			{
 				JButton BtnBorrow = new JButton("Borrow");
 				BtnBorrow.addActionListener(new ActionListener() {

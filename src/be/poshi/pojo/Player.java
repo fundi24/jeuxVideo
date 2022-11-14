@@ -96,7 +96,14 @@ public class Player extends User {
 
 	// Methodes supplementaires
 	public boolean LoanAllowend() {
-		return false;
+		boolean isValid = false;
+		
+		if(credit > 0)
+		{
+			isValid = true;
+		}
+		
+		return isValid;
 	}
 
 	public boolean AddBirthdayBonus() {
