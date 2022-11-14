@@ -92,9 +92,10 @@ public class VideoGame implements Serializable {
 	}
 
 	public static ArrayList<VideoGame> GetAllVideoGame() {
+		int notUsed = 0;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		return VideoGameDAO.GetAll();
+		return VideoGameDAO.findAll(notUsed);
 	}
 
 	public int GetIdFromDb() {

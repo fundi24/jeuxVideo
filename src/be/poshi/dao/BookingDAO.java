@@ -39,7 +39,21 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public boolean delete(Booking obj) {
-		return false;
+		boolean success = false;
+		
+		String query = "DELETE FROM Booking WHERE IdBooking = '" + obj.getIdBooking()+"'";
+		
+		try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+				pstmt.executeUpdate();
+				pstmt.close();
+				success = true;
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	@Override
@@ -71,7 +85,7 @@ public class BookingDAO extends DAO<Booking> {
 	}
 
 	@Override
-	public ArrayList<Booking> GetAll() {
+	public ArrayList<Booking> findAll(int id) {
 		return null;
 	}
 

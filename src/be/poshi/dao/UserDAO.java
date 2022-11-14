@@ -67,7 +67,7 @@ public class UserDAO extends DAO<User> {
 	}
 
 	@Override
-	public ArrayList<User> GetAll() {
+	public ArrayList<User> findAll(int id) {
 		return null;
 	}
 }

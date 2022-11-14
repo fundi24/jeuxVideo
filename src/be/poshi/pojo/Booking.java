@@ -68,6 +68,9 @@ public class Booking implements Serializable {
 	}
 	
 	public void Delete() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Booking> BookingDAO = adf.getBookingDAO();
+		BookingDAO.delete(this);
 	}
 
 }

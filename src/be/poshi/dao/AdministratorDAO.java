@@ -46,7 +46,7 @@ public class AdministratorDAO extends DAO<Administrator> {
 	}
 
 	@Override
-	public ArrayList<Administrator> GetAll() {
+	public ArrayList<Administrator> findAll(int id) {
 		return null;
 	}
 

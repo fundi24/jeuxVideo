@@ -2,6 +2,10 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
 
 public class Loan implements Serializable {
 
@@ -89,6 +93,15 @@ public class Loan implements Serializable {
 	}
 
 	public void EndLoan() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Loan> LoanDAO = adf.getLoanDAO();
+		LoanDAO.update(this);
+	}
+	
+	public static ArrayList<Loan> GetAllLoansAvailable(int id) {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Loan> LoanDAO = adf.getLoanDAO();
+		return LoanDAO.findAll(id);
 	}
 
 }

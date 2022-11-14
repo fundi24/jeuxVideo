@@ -82,5 +82,11 @@ public class Copy implements Serializable {
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 		return CopyDAO.create(this);
 	}
+	
+	public boolean DeleteACopy(){
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> CopyDAO = adf.getCopyDAO();
+		return CopyDAO.delete(this);
+	}
 
 }

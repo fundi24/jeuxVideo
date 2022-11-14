@@ -189,7 +189,7 @@ public class PlayerDAO extends DAO<Player> {
 	}
 	
 	@Override
-	public ArrayList<Player> GetAll() {
+	public ArrayList<Player> findAll(int id) {
 		return null;
 	}
 	

@@ -27,7 +27,6 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		boolean success = false;
 		
 		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
-
 		
 		boolean isValid = CheckForCopies(obj.getIdVideoGame());
 		boolean isValid2 = CheckForBookings(obj.getIdVideoGame());
@@ -42,7 +41,6 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 		}
 		
 		return success;
@@ -91,7 +89,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	}
 
 	@Override
-	public ArrayList<VideoGame> GetAll() {
+	public ArrayList<VideoGame> findAll(int id) {
 		ArrayList<VideoGame> videoGames = new ArrayList<VideoGame>();
 
 		String query = "SELECT * FROM VideoGame";
@@ -99,8 +97,8 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			while (result.next()) {
-				int id = result.getInt("IdVideoGame");
-				VideoGame vg = find(id);
+				int idVG = result.getInt("IdVideoGame");
+				VideoGame vg = find(idVG);
 				videoGames.add(vg);
 			}
 		} catch (SQLException e) {

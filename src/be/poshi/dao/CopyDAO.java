@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
@@ -41,7 +43,25 @@ public class CopyDAO extends DAO<Copy> {
 
 	@Override
 	public boolean delete(Copy obj) {
-		return false;
+		boolean success = false;
+		String query = "DELETE FROM Copy WHERE IdCopy ='" + obj.getIdCopy()+"'";
+		
+		boolean isValid = CheckForLoan(obj.getIdCopy());
+		
+		if(isValid==true)
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+				pstmt.executeUpdate();
+				pstmt.close();
+				success = true;
+			} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return success;
 	}
 
 	@Override
@@ -72,8 +92,25 @@ public class CopyDAO extends DAO<Copy> {
 	}
 
 	@Override
-	public ArrayList<Copy> GetAll() {
+	public ArrayList<Copy> findAll(int id) {
 		return null;
+	}
+	
+	public boolean CheckForLoan(int id)
+	{
+		boolean isValid = true;
+		String query = "SELECT * FROM Loan WHERE IdCopy='" + id + "'";
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				isValid = false;
+				JOptionPane.showMessageDialog(null, "There is a loan in progress !");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isValid;
 	}
 
 }
