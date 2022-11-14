@@ -23,14 +23,15 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	}
 
 	@Override
-	public boolean delete(VideoGame obj) { //verifier si il n'y a pas de copy du jeu
+	public boolean delete(VideoGame obj) {
 		boolean success = false;
 		
 		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
 
 		
 		boolean isValid = CheckForCopies(obj.getIdVideoGame());
-		if(isValid==true)
+		boolean isValid2 = CheckForBookings(obj.getIdVideoGame());
+		if(isValid==true && isValid2 == true)
 		{
 			try {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
@@ -139,6 +140,23 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is at least one copy of the game !");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isValid;
+	}
+	
+	public boolean CheckForBookings(int id)
+	{
+		boolean isValid = true;
+		String query = "SELECT * FROM Booking WHERE IdVideoGame='" + id + "'";
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				isValid = false;
+				JOptionPane.showMessageDialog(null, "There is at least one booking of the game !");
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();

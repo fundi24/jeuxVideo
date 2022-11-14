@@ -104,6 +104,17 @@ public class HomeWindow extends JFrame {
 			LblPseudo.setText(player.getPseudo());
 			LblCredit.setText(player.getCredit() + " credit(s)");
 			
+			JButton BtnMyLoans = new JButton("My loans");
+			BtnMyLoans.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyLoanWindow MLW = new MyLoanWindow(connectedUser);
+					MLW.setVisible(true);
+					dispose();
+				}
+			});
+			BtnMyLoans.setBounds(10, 200, 139, 21);
+			contentPane.add(BtnMyLoans);
+			
 			JButton BtnMyGames = new JButton("My games");
 			BtnMyGames.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -112,7 +123,7 @@ public class HomeWindow extends JFrame {
 					dispose();
 				}
 			});
-			BtnMyGames.setBounds(10, 200, 139, 21);
+			BtnMyGames.setBounds(270, 200, 139, 21);
 			contentPane.add(BtnMyGames);
 			
 			JButton BtnMybookings = new JButton("My bookings");

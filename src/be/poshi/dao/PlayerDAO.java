@@ -107,10 +107,12 @@ public class PlayerDAO extends DAO<Player> {
 	public Player find(int id) {
 
 		Player player = null;
+		
+		//Recuperer player et ses copies
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM (((User LEFT JOIN Booking ON User.IdUser = Booking.IdUser) LEFT JOIN Copy ON User.IdUser = Copy.IdUser) LEFT JOIN Loan ON User.IdUser = Loan.IdUser) WHERE User.IdUser = " + id);
+					.executeQuery("SELECT * FROM User INNER JOIN Copy ON User.IdUser = Copy.IdUser WHERE User.IdUser = " + id);
 			if (result.first()) {
 				player = new Player();
 				player.setIdUser(id);
@@ -119,20 +121,62 @@ public class PlayerDAO extends DAO<Player> {
 				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
 				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
 				result.beforeFirst();
-				BookingDAO bookingDAO = new BookingDAO(this.connect);
 				CopyDAO copyDAO = new CopyDAO(this.connect);
-				LoanDAO loanDAO = new LoanDAO(this.connect);
 				while(result.next())
 				{
 					player.getCopies().add(copyDAO.find(result.getInt("IdCopy")));
-					player.getBookings().add(bookingDAO.find(result.getInt("IdBooking")));
-					player.getBorrowings().add(loanDAO.find(result.getInt("IdLoan")));
 					
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		//recuperer ses bookings
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM User INNER JOIN Booking ON User.IdUser = Booking.IdUser WHERE User.IdUser = " + id);
+			BookingDAO bookingDAO = new BookingDAO(this.connect);
+			while(result.next())
+			{
+				player.getBookings().add(bookingDAO.find(result.getInt("IdBooking")));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//recuperer ses emprunts
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM User INNER JOIN Loan ON User.IdUser = Loan.IdUser WHERE User.IdUser = " + id);
+			LoanDAO loanDAO = new LoanDAO(this.connect);
+			while(result.next())
+			{
+				player.getBorrowings().add(loanDAO.find(result.getInt("IdLoan")));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//recuperer ses prets
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM (User INNER JOIN Copy ON User.IdUser = Copy.IdUser) INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdUser = " + id);
+			LoanDAO loanDAO = new LoanDAO(this.connect);
+			while(result.next())
+			{
+				player.getLoans().add(loanDAO.find(result.getInt("IdLoan")));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return player;
 	}
 	
