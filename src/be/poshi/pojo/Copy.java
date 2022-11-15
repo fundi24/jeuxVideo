@@ -1,10 +1,8 @@
 package be.poshi.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
-import be.poshi.dao.CopyDAO;
 import be.poshi.dao.DAO;
 
 public class Copy implements Serializable {

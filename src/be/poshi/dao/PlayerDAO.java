@@ -11,10 +11,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import be.poshi.connection.DatabaseConnection;
-import be.poshi.pojo.Booking;
-import be.poshi.pojo.Copy;
-import be.poshi.pojo.Loan;
 import be.poshi.pojo.Player;
 
 public class PlayerDAO extends DAO<Player> {

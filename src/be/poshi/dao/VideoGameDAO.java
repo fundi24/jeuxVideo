@@ -1,14 +1,15 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.VideoGame;
 
 public class VideoGameDAO extends DAO<VideoGame> {
@@ -19,7 +20,24 @@ public class VideoGameDAO extends DAO<VideoGame> {
 
 	@Override
 	public boolean create(VideoGame obj) {
-		return false;
+		boolean success = false;
+		
+		String query = "INSERT INTO VideoGame (VideoGameName, CreditCost, ConsoleName, VersionName) VALUES (?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			pstmt.setString(1, obj.getName());
+			pstmt.setInt(2, obj.getCreditCost());
+			pstmt.setString(3, obj.getConsole());
+			pstmt.setString(4, obj.getVersion());
+			pstmt.execute();
+			pstmt.close();
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	@Override
@@ -68,7 +86,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	public VideoGame find(int id) {
 		VideoGame videoGame = null;
 
-		String query = "SELECT * FROM ((VideoGame INNER JOIN Version ON VideoGame.IdVersion = Version.IdVersion) INNER JOIN Console on Version.IdConsole = Console.IdConsole) WHERE VideoGame.IdVideoGame = '"
+		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '"
 				+ id + "'";
 		try {
 			ResultSet result = this.connect

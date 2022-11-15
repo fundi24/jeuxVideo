@@ -1,19 +1,14 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import be.poshi.connection.DatabaseConnection;
 import be.poshi.pojo.Copy;
-import be.poshi.pojo.Loan;
-import be.poshi.pojo.Player;
 import be.poshi.pojo.VideoGame;
 
 public class CopyDAO extends DAO<Copy> {

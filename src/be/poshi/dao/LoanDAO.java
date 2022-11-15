@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
-import be.poshi.pojo.Player;
-import be.poshi.pojo.VideoGame;
 
 public class LoanDAO extends DAO<Loan> {
 

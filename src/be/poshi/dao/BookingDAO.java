@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import be.poshi.pojo.Booking;
-import be.poshi.pojo.Copy;
 import be.poshi.pojo.VideoGame;
 
 public class BookingDAO extends DAO<Booking> {

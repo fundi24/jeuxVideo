@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
-import be.poshi.dao.VideoGameDAO;
 
 public class VideoGame implements Serializable {
 
@@ -102,6 +101,13 @@ public class VideoGame implements Serializable {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
 		return VideoGameDAO.update(this);
+	}
+	
+	public boolean CreateAVideoGame()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		return VideoGameDAO.create(this);
 	}
 
 	public boolean Delete() {

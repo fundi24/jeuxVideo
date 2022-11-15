@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
-import be.poshi.dao.PlayerDAO;
 
 public class Player extends User {
 
