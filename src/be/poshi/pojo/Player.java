@@ -1,6 +1,7 @@
 package be.poshi.pojo;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
@@ -14,6 +15,7 @@ public class Player extends User {
 	private String pseudo;
 	private LocalDate registrationDate;
 	private LocalDate dateOfBirth;
+	private boolean ReceivedBirthdayGift;
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 	private ArrayList<Loan> loans;
@@ -85,6 +87,14 @@ public class Player extends User {
 		this.loans = loans;
 	}
 
+	public boolean ReceivedBirthdayGift() {
+		return ReceivedBirthdayGift;
+	}
+
+	public void setReceivedBirthdayGift(boolean receivedBirthdayGift) {
+		ReceivedBirthdayGift = receivedBirthdayGift;
+	}
+
 	public ArrayList<Loan> getBorrowings() {
 		return borrowings;
 	}
@@ -106,10 +116,28 @@ public class Player extends User {
 	}
 
 	public boolean AddBirthdayBonus() {
-		//credit = credit + 2;
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Player> PlayerDAO = adf.getPlayerDAO();
-		return PlayerDAO.update(this);
+		
+		LocalDate birthday = getDateOfBirth();
+		int dayBirthday = birthday.getDayOfMonth();
+		Month monthBirthday = birthday.getMonth();
+		LocalDate today = LocalDate.now();
+		int day = today.getDayOfMonth();
+		Month month = today.getMonth();
+		
+		if(ReceivedBirthdayGift == false && day == dayBirthday && month == monthBirthday )
+		{
+			credit = credit + 2;
+			ReceivedBirthdayGift = true;
+			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+			DAO<Player> PlayerDAO = adf.getPlayerDAO();
+			return PlayerDAO.update(this);
+		}
+		else
+		{
+			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+			DAO<Player> PlayerDAO = adf.getPlayerDAO();
+			return PlayerDAO.update(this);
+		}
 	}
 
 	public boolean Register() {

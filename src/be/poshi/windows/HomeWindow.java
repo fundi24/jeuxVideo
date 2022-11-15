@@ -168,7 +168,7 @@ public class HomeWindow extends JFrame {
 			boolean success = player.AddBirthdayBonus();
 			if(success == true)
 			{
-				JOptionPane.showMessageDialog(this, "You received 2 credits for your birthday. Please log in again !");
+				JOptionPane.showMessageDialog(this, "You received 2 credits for your birthday. Happy birthday !");
 			}
 			
 		}

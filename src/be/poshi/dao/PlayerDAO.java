@@ -24,7 +24,7 @@ public class PlayerDAO extends DAO<Player> {
 		boolean success = false;
 		LocalDate today = LocalDate.now();
 		
-		String query = "INSERT INTO User (Username, Password, RegistrationDate, Pseudo, Credit, DateOfBirth, Administrator) VALUES (?,?,?,?,?,?,?)";
+		String query = "INSERT INTO User (Username, Password, RegistrationDate, Pseudo, Credit, DateOfBirth, Administrator, ReceivedBirthdayGift) VALUES (?,?,?,?,?,?,?,?)";
 		
 		boolean isValid = CheckIfUsernameIsAvailable(obj.getUsername());
 		
@@ -39,6 +39,7 @@ public class PlayerDAO extends DAO<Player> {
 				pstmt.setInt(5, 10);
 				pstmt.setDate(6,Date.valueOf(obj.getDateOfBirth()));
 				pstmt.setBoolean(7, false);
+				pstmt.setBoolean(8, false);
 				pstmt.execute();
 				pstmt.close();
 				success = true;
@@ -116,6 +117,7 @@ public class PlayerDAO extends DAO<Player> {
 				player.setCredit(result.getInt("Credit"));
 				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
 				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
+				player.setReceivedBirthdayGift(result.getBoolean("ReceivedBirthdayGift"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
