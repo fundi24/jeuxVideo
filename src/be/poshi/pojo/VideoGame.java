@@ -98,10 +98,6 @@ public class VideoGame implements Serializable {
 		return VideoGameDAO.findAll(notUsed);
 	}
 
-	public int GetIdFromDb() {
-		return VideoGameDAO.GetId(this);
-	}
-
 	public boolean UpdateCredit() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();

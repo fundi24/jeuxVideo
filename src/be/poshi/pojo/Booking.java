@@ -67,10 +67,10 @@ public class Booking implements Serializable {
 		return BookingDAO.create(this);
 	}
 	
-	public void Delete() {
+	public boolean Delete() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Booking> BookingDAO = adf.getBookingDAO();
-		BookingDAO.delete(this);
+		return BookingDAO.delete(this);
 	}
 
 }
