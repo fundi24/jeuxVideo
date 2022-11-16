@@ -1,6 +1,7 @@
 package be.poshi.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
@@ -85,6 +86,12 @@ public class Copy implements Serializable {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Copy> CopyDAO = adf.getCopyDAO();
 		return CopyDAO.delete(this);
+	}
+	
+	public static ArrayList<Copy> GetAllCopy(int id) {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> CopyDAO = adf.getCopyDAO();
+		return CopyDAO.findAll(id);
 	}
 
 }

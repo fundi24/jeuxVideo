@@ -1,6 +1,7 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +18,25 @@ public class LoanDAO extends DAO<Loan> {
 
 	@Override
 	public boolean create(Loan obj) {
-		return false;
+		boolean success = false;
+		
+		String query = "INSERT INTO Loan (StartDate, EndDate, OnGoing, IdUser, IdCopy) VALUES (?,?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			pstmt.setDate(1, Date.valueOf(obj.getStartDate()));
+			pstmt.setDate(2, Date.valueOf(obj.getEndDate()));
+			pstmt.setBoolean(3, obj.getOngoing());
+			pstmt.setInt(4, obj.getBorrower().getIdUser());
+			pstmt.setInt(5, obj.getCopy().getIdCopy());
+			pstmt.execute();
+			pstmt.close();
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	@Override
@@ -72,21 +91,7 @@ public class LoanDAO extends DAO<Loan> {
 
 	@Override
 	public ArrayList<Loan> findAll(int id) {
-		ArrayList<Loan> loans = new ArrayList<Loan>();
-
-		String query = "SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE OnGoing = false AND NOT Copy.IdUser = '"+id+"'";
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
-			while (result.next()) {
-				int idLoan = result.getInt("IdLoan");
-				Loan loan = find(idLoan);
-				loans.add(loan);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loans;
+		return null;
 	}
 
 }

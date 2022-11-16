@@ -98,10 +98,10 @@ public class Loan implements Serializable {
 		LoanDAO.update(this);
 	}
 	
-	public static ArrayList<Loan> GetAllLoansAvailable(int id) {
+	public boolean MakeLoan() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Loan> LoanDAO = adf.getLoanDAO();
-		return LoanDAO.findAll(id);
+		return LoanDAO.create(this);
 	}
 
 }

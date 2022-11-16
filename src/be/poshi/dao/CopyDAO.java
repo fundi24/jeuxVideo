@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import be.poshi.pojo.Copy;
+import be.poshi.pojo.Loan;
 import be.poshi.pojo.VideoGame;
 
 public class CopyDAO extends DAO<Copy> {
@@ -88,13 +89,27 @@ public class CopyDAO extends DAO<Copy> {
 
 	@Override
 	public ArrayList<Copy> findAll(int id) {
-		return null;
+		ArrayList<Copy> copies = new ArrayList<Copy>();
+
+		String query = "SELECT * FROM Copy WHERE NOT Copy.IdUser = '"+id+"'";
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
+			while (result.next()) {
+				int idCopy = result.getInt("IdCopy");
+				Copy copy = find(idCopy);
+				copies.add(copy);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return copies;
 	}
 	
 	public boolean CheckForLoan(int id)
 	{
 		boolean isValid = true;
-		String query = "SELECT * FROM Loan WHERE IdCopy='" + id + "'";
+		String query = "SELECT * FROM Loan WHERE IdCopy='" + id + "' AND OnGoing = True";
 		try {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery(query);

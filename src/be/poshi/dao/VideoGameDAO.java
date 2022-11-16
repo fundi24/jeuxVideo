@@ -24,17 +24,22 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		
 		String query = "INSERT INTO VideoGame (VideoGameName, CreditCost, ConsoleName, VersionName) VALUES (?,?,?,?)";
 		
-		try {
-			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-			pstmt.setString(1, obj.getName());
-			pstmt.setInt(2, obj.getCreditCost());
-			pstmt.setString(3, obj.getConsole());
-			pstmt.setString(4, obj.getVersion());
-			pstmt.execute();
-			pstmt.close();
-			success = true;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		boolean isValid = CheckIfGameExist(obj);
+		
+		if(isValid==true)
+		{
+			try {
+				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+				pstmt.setString(1, obj.getName());
+				pstmt.setInt(2, obj.getCreditCost());
+				pstmt.setString(3, obj.getConsole());
+				pstmt.setString(4, obj.getVersion());
+				pstmt.execute();
+				pstmt.close();
+				success = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return success;
@@ -153,6 +158,24 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is at least one booking of the game !");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isValid;
+	}
+	
+	public boolean CheckIfGameExist(VideoGame vg)
+	{
+		boolean isValid = true;
+		String query = "SELECT * FROM VideoGame WHERE VideoGameName ='" + vg.getName() + "' AND CreditCost = '" + vg.getCreditCost()
+				+ "' AND ConsoleName = '" + vg.getConsole() + "' AND VersionName = '" + vg.getVersion() + "'" ;
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				isValid = false;
+				JOptionPane.showMessageDialog(null, "There is already this game in the catalogue !");
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();
