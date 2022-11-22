@@ -21,13 +21,12 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	@Override
 	public boolean create(VideoGame obj) {
 		boolean success = false;
-		
+
 		String query = "INSERT INTO VideoGame (VideoGameName, CreditCost, ConsoleName, VersionName) VALUES (?,?,?,?)";
-		
-		boolean isValid = CheckIfGameExist(obj);
-		
-		if(isValid==true)
-		{
+
+		boolean isValid = checkIfGameExist(obj);
+
+		if (isValid == true) {
 			try {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 				pstmt.setString(1, obj.getName());
@@ -41,31 +40,29 @@ public class VideoGameDAO extends DAO<VideoGame> {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return success;
 	}
 
 	@Override
 	public boolean delete(VideoGame obj) {
 		boolean success = false;
-		
-		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
-		
-		boolean isValid = CheckForCopies(obj.getIdVideoGame());
-		boolean isValid2 = CheckForBookings(obj.getIdVideoGame());
-		if(isValid==true && isValid2 == true)
-		{
+
+		String query = "DELETE FROM VideoGame WHERE IdVideoGame='" + obj.getIdVideoGame() + "'";
+
+		boolean isValid = checkForCopies(obj.getIdVideoGame());
+		boolean isValid2 = checkForBookings(obj.getIdVideoGame());
+		if (isValid == true && isValid2 == true) {
 			try {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 				pstmt.executeUpdate();
 				pstmt.close();
 				success = true;
-			} 
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return success;
 	}
 
@@ -73,7 +70,8 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	public boolean update(VideoGame obj) {
 		boolean success = false;
 
-		String query = "UPDATE VideoGame SET CreditCost='" + obj.getCreditCost() + "'WHERE IdVideoGame='" + obj.getIdVideoGame()+"'";
+		String query = "UPDATE VideoGame SET CreditCost='" + obj.getCreditCost() + "'WHERE IdVideoGame='"
+				+ obj.getIdVideoGame() + "'";
 
 		try {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
@@ -91,8 +89,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	public VideoGame find(int id) {
 		VideoGame videoGame = null;
 
-		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '"
-				+ id + "'";
+		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '" + id + "'";
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
@@ -130,53 +127,50 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		return videoGames;
 	}
 
-	
-	public boolean CheckForCopies(int id)
-	{
+	public boolean checkForCopies(int id) {
 		boolean isValid = true;
 		String query = "SELECT * FROM Copy WHERE IdVideoGame='" + id + "'";
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query);
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is at least one copy of the game !");
-				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return isValid;
 	}
-	
-	public boolean CheckForBookings(int id)
-	{
+
+	public boolean checkForBookings(int id) {
 		boolean isValid = true;
 		String query = "SELECT * FROM Booking WHERE IdVideoGame='" + id + "'";
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query);
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is at least one booking of the game !");
-				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return isValid;
 	}
-	
-	public boolean CheckIfGameExist(VideoGame vg)
-	{
+
+	public boolean checkIfGameExist(VideoGame vg) {
 		boolean isValid = true;
-		String query = "SELECT * FROM VideoGame WHERE VideoGameName ='" + vg.getName() + "' AND CreditCost = '" + vg.getCreditCost()
-				+ "' AND ConsoleName = '" + vg.getConsole() + "' AND VersionName = '" + vg.getVersion() + "'" ;
+		String query = "SELECT * FROM VideoGame WHERE VideoGameName ='" + vg.getName() + "' AND CreditCost = '"
+				+ vg.getCreditCost() + "' AND ConsoleName = '" + vg.getConsole() + "' AND VersionName = '"
+				+ vg.getVersion() + "'";
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query);
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is already this game in the catalogue !");
-				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

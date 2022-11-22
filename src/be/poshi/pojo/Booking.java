@@ -15,14 +15,13 @@ public class Booking implements Serializable {
 	private Player player;
 	private VideoGame videoGame;
 
-	// Constructeur
+	// Constructeurs
 	public Booking(Player player, VideoGame videoGame) {
 		this.player = player;
 		this.videoGame = videoGame;
 	}
-	
-	public Booking(VideoGame videoGame) //A verifier !!!
-	{
+
+	public Booking(VideoGame videoGame) {
 		this.videoGame = videoGame;
 	}
 
@@ -60,17 +59,16 @@ public class Booking implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public boolean MakeABooking()
-	{
+	public boolean makeABooking() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Booking> BookingDAO = adf.getBookingDAO();
-		return BookingDAO.create(this);
+		DAO<Booking> bookingDAO = adf.getBookingDAO();
+		return bookingDAO.create(this);
 	}
-	
-	public boolean Delete() {
+
+	public boolean delete() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Booking> BookingDAO = adf.getBookingDAO();
-		return BookingDAO.delete(this);
+		DAO<Booking> bookingDAO = adf.getBookingDAO();
+		return bookingDAO.delete(this);
 	}
 
 }

@@ -43,8 +43,8 @@ public abstract class User implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public static User Login(String username, String password) throws Exception {
-		return UserDAO.Login(username, password);
+	public static User login(String username, String password) throws Exception {
+		return UserDAO.login(username, password);
 	}
 
 }

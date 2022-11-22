@@ -40,19 +40,17 @@ public class CopyDAO extends DAO<Copy> {
 	@Override
 	public boolean delete(Copy obj) {
 		boolean success = false;
-		String query = "DELETE FROM Copy WHERE IdCopy ='" + obj.getIdCopy()+"'";
-		
-		boolean isValid = CheckForLoan(obj.getIdCopy());
-		
-		if(isValid==true)
-		{
+		String query = "DELETE FROM Copy WHERE IdCopy ='" + obj.getIdCopy() + "'";
+
+		boolean isValid = checkForLoan(obj.getIdCopy());
+
+		if (isValid == true) {
 			try {
 				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 				pstmt.executeUpdate();
 				pstmt.close();
 				success = true;
-			} 
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -69,7 +67,7 @@ public class CopyDAO extends DAO<Copy> {
 	public Copy find(int id) {
 		Copy copy = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
 
 		try {
 			ResultSet result = this.connect
@@ -77,7 +75,7 @@ public class CopyDAO extends DAO<Copy> {
 					.executeQuery("SELECT * FROM Copy WHERE IdCopy = " + id);
 			if (result.first()) {
 				int idVideoGame = result.getInt("IdVideoGame");
-				VideoGame vg = VideoGameDAO.find(idVideoGame);
+				VideoGame vg = videoGameDAO.find(idVideoGame);
 				copy = new Copy(vg);
 				copy.setIdCopy(id);
 			}
@@ -91,7 +89,7 @@ public class CopyDAO extends DAO<Copy> {
 	public ArrayList<Copy> findAll(int id) {
 		ArrayList<Copy> copies = new ArrayList<Copy>();
 
-		String query = "SELECT * FROM Copy WHERE NOT Copy.IdUser = '"+id+"'";
+		String query = "SELECT * FROM Copy WHERE NOT Copy.IdUser = '" + id + "'";
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
@@ -105,18 +103,17 @@ public class CopyDAO extends DAO<Copy> {
 		}
 		return copies;
 	}
-	
-	public boolean CheckForLoan(int id)
-	{
+
+	public boolean checkForLoan(int id) {
 		boolean isValid = true;
 		String query = "SELECT * FROM Loan WHERE IdCopy='" + id + "' AND OnGoing = True";
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query);
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				isValid = false;
 				JOptionPane.showMessageDialog(null, "There is a loan in progress !");
-				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

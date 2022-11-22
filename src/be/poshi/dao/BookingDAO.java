@@ -39,19 +39,18 @@ public class BookingDAO extends DAO<Booking> {
 	@Override
 	public boolean delete(Booking obj) {
 		boolean success = false;
-		
-		String query = "DELETE FROM Booking WHERE IdBooking = '" + obj.getIdBooking()+"'";
-		
+
+		String query = "DELETE FROM Booking WHERE IdBooking = '" + obj.getIdBooking() + "'";
+
 		try {
-				PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
-				pstmt.executeUpdate();
-				pstmt.close();
-				success = true;
-		} 
-		catch (SQLException e) {
+			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
+			pstmt.executeUpdate();
+			pstmt.close();
+			success = true;
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return success;
 	}
 
@@ -64,7 +63,7 @@ public class BookingDAO extends DAO<Booking> {
 	public Booking find(int id) {
 		Booking booking = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
 
 		try {
 			ResultSet result = this.connect
@@ -72,7 +71,7 @@ public class BookingDAO extends DAO<Booking> {
 					.executeQuery("SELECT * FROM Booking WHERE IdBooking = " + id);
 			if (result.first()) {
 				int idVideoGame = result.getInt("IdVideoGame");
-				VideoGame vg = VideoGameDAO.find(idVideoGame);
+				VideoGame vg = videoGameDAO.find(idVideoGame);
 				booking = new Booking(vg);
 				booking.setIdBooking(id);
 				booking.setBookingDate(result.getDate("BookingDate").toLocalDate());

@@ -12,23 +12,15 @@ public class Copy implements Serializable {
 	private static final long serialVersionUID = 8982261286529829239L;
 	private int idCopy;
 	private VideoGame videoGame;
-	private Loan loan;
 	private Player owner;
 
 	// Constructeurs
-	public Copy(VideoGame videoGame, Loan loan, Player owner) {
-		this.videoGame = videoGame;
-		this.loan = loan;
-		this.owner = owner;
-	}
-
 	public Copy(VideoGame videoGame, Player owner) {
 		this.videoGame = videoGame;
 		this.owner = owner;
 	}
-	
-	public Copy(VideoGame videoGame) //A verifier !!!
-	{
+
+	public Copy(VideoGame videoGame) {
 		this.videoGame = videoGame;
 	}
 
@@ -49,14 +41,6 @@ public class Copy implements Serializable {
 		this.videoGame = videoGame;
 	}
 
-	public Loan getLoan() {
-		return loan;
-	}
-
-	public void setLoan(Loan loan) {
-		this.loan = loan;
-	}
-
 	public Player getOwner() {
 		return owner;
 	}
@@ -66,32 +50,50 @@ public class Copy implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public void ReleaseCopy() {
+	public void releaseCopy() {
 	}
 
-	public void Borrow() {
+	public void borrow() {
 	}
 
-	public Boolean IsAvailable() {
+	public boolean isAvailable() {
 		return false;
 	}
 
-	public boolean CreateACopy() {
+	public boolean createACopy() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> CopyDAO = adf.getCopyDAO();
-		return CopyDAO.create(this);
+		DAO<Copy> copyDAO = adf.getCopyDAO();
+		return copyDAO.create(this);
+	}
+
+	public boolean deleteACopy() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> copyDAO = adf.getCopyDAO();
+		return copyDAO.delete(this);
+	}
+
+	public static ArrayList<Copy> getAllCopy(User user) {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> copyDAO = adf.getCopyDAO();
+		return copyDAO.findAll(user.getIdUser());
 	}
 	
-	public boolean DeleteACopy(){
+	public static ArrayList<Copy> getAllCopyOfAGame(User user, VideoGame videogame)
+	{
+		ArrayList<Copy> copiesOfAGame = new ArrayList<Copy>();
+		
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> CopyDAO = adf.getCopyDAO();
-		return CopyDAO.delete(this);
-	}
-	
-	public static ArrayList<Copy> GetAllCopy(int id) {
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> CopyDAO = adf.getCopyDAO();
-		return CopyDAO.findAll(id);
+		DAO<Copy> copyDAO = adf.getCopyDAO();
+		ArrayList<Copy> copies = copyDAO.findAll(user.getIdUser());
+		
+		for(Copy c : copies)
+		{
+			if(c.videoGame.equals(videogame))
+			copiesOfAGame.add(c);
+		}
+		
+		return copiesOfAGame;
+		
 	}
 
 }

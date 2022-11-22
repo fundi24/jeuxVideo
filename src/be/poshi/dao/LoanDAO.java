@@ -19,9 +19,9 @@ public class LoanDAO extends DAO<Loan> {
 	@Override
 	public boolean create(Loan obj) {
 		boolean success = false;
-		
+
 		String query = "INSERT INTO Loan (StartDate, EndDate, OnGoing, IdUser, IdCopy) VALUES (?,?,?,?,?)";
-		
+
 		try {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			pstmt.setDate(1, Date.valueOf(obj.getStartDate()));
@@ -35,7 +35,7 @@ public class LoanDAO extends DAO<Loan> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return success;
 	}
 
@@ -48,7 +48,7 @@ public class LoanDAO extends DAO<Loan> {
 	public boolean update(Loan obj) {
 		boolean success = false;
 
-		String query = "UPDATE Loan SET OnGoing = false WHERE IdLoan ='" + obj.getIdLoan()+"'";
+		String query = "UPDATE Loan SET OnGoing = false WHERE IdLoan ='" + obj.getIdLoan() + "'";
 
 		try {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
@@ -66,17 +66,17 @@ public class LoanDAO extends DAO<Loan> {
 	public Loan find(int id) {
 		Loan loan = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> CopyDAO = adf.getCopyDAO();
+		DAO<Copy> copyDAO = adf.getCopyDAO();
 
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = " + id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+							"SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = " + id);
 			if (result.first()) {
 				int idCopy = result.getInt("IdCopy");
 
-				Copy copy = CopyDAO.find(idCopy);
-				
+				Copy copy = copyDAO.find(idCopy);
+
 				loan = new Loan(copy);
 				loan.setIdLoan(id);
 				loan.setStartDate(result.getDate("StartDate").toLocalDate());

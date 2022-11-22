@@ -14,20 +14,17 @@ public class Loan implements Serializable {
 	private int idLoan;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private Boolean ongoing;
+	private boolean ongoing;
 	private Copy copy;
-	private Player lender;
 	private Player borrower;
 
-	// Constructeur
-	public Loan(Copy copy, Player lender, Player borrower) {
+	// Constructeurs
+	public Loan(Copy copy, Player borrower) {
 		this.copy = copy;
-		this.lender = lender;
 		this.borrower = borrower;
 	}
-	
-	public Loan(Copy copy)  //A verifier !!!
-	{
+
+	public Loan(Copy copy) {
 		this.copy = copy;
 	}
 
@@ -48,7 +45,7 @@ public class Loan implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public Boolean getOngoing() {
+	public boolean getOngoing() {
 		return ongoing;
 	}
 
@@ -72,14 +69,6 @@ public class Loan implements Serializable {
 		this.copy = copy;
 	}
 
-	public Player getLender() {
-		return lender;
-	}
-
-	public void setLender(Player lender) {
-		this.lender = lender;
-	}
-
 	public Player getBorrower() {
 		return borrower;
 	}
@@ -89,19 +78,19 @@ public class Loan implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public void CalculateBalance() {
+	public void calculateBalance() {
 	}
 
-	public void EndLoan() {
+	public void endLoan() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Loan> LoanDAO = adf.getLoanDAO();
-		LoanDAO.update(this);
+		DAO<Loan> loanDAO = adf.getLoanDAO();
+		loanDAO.update(this);
 	}
-	
-	public boolean MakeLoan() {
+
+	public boolean makeLoan() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Loan> LoanDAO = adf.getLoanDAO();
-		return LoanDAO.create(this);
+		DAO<Loan> loanDAO = adf.getLoanDAO();
+		return loanDAO.create(this);
 	}
 
 }

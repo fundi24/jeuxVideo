@@ -15,7 +15,7 @@ public class Player extends User {
 	private String pseudo;
 	private LocalDate registrationDate;
 	private LocalDate dateOfBirth;
-	private boolean ReceivedBirthdayGift;
+	private boolean receivedBirthdayGift;
 	private ArrayList<Booking> bookings;
 	private ArrayList<Copy> copies;
 	private ArrayList<Loan> loans;
@@ -88,11 +88,11 @@ public class Player extends User {
 	}
 
 	public boolean ReceivedBirthdayGift() {
-		return ReceivedBirthdayGift;
+		return receivedBirthdayGift;
 	}
 
 	public void setReceivedBirthdayGift(boolean receivedBirthdayGift) {
-		ReceivedBirthdayGift = receivedBirthdayGift;
+		this.receivedBirthdayGift = receivedBirthdayGift;
 	}
 
 	public ArrayList<Loan> getBorrowings() {
@@ -104,46 +104,42 @@ public class Player extends User {
 	}
 
 	// Methodes supplementaires
-	public boolean LoanAllowend() {
+	public boolean loanAllowed() {
 		boolean isValid = false;
-		
-		if(credit > 0)
-		{
+
+		if (credit > 0) {
 			isValid = true;
 		}
-		
+
 		return isValid;
 	}
 
-	public boolean AddBirthdayBonus() {
-		
+	public boolean addBirthdayBonus() {
+
 		LocalDate birthday = getDateOfBirth();
 		int dayBirthday = birthday.getDayOfMonth();
 		Month monthBirthday = birthday.getMonth();
 		LocalDate today = LocalDate.now();
 		int day = today.getDayOfMonth();
 		Month month = today.getMonth();
-		
-		if(ReceivedBirthdayGift == false && day == dayBirthday && month == monthBirthday )
-		{
+
+		if (receivedBirthdayGift == false && day == dayBirthday && month == monthBirthday) {
 			credit = credit + 2;
-			ReceivedBirthdayGift = true;
+			receivedBirthdayGift = true;
 			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-			DAO<Player> PlayerDAO = adf.getPlayerDAO();
-			return PlayerDAO.update(this);
-		}
-		else
-		{
+			DAO<Player> playerDAO = adf.getPlayerDAO();
+			return playerDAO.update(this);
+		} else {
 			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-			DAO<Player> PlayerDAO = adf.getPlayerDAO();
-			return PlayerDAO.update(this);
+			DAO<Player> playerDAO = adf.getPlayerDAO();
+			return playerDAO.update(this);
 		}
 	}
 
-	public boolean Register() {
+	public boolean register() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Player> PlayerDAO = adf.getPlayerDAO();
-		return PlayerDAO.create(this);
+		DAO<Player> playerDAO = adf.getPlayerDAO();
+		return playerDAO.create(this);
 	}
 
 }

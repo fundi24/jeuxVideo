@@ -76,7 +76,7 @@ public class HomeWindow extends JFrame {
 		});
 		BtnLogout.setBounds(270, 150, 139, 21);
 		getContentPane().add(BtnLogout);
-		
+
 		JButton BtnGetGameCatalogue = new JButton("See the catalogue");
 		BtnGetGameCatalogue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,20 +88,20 @@ public class HomeWindow extends JFrame {
 		BtnGetGameCatalogue.setBounds(270, 100, 139, 21);
 		contentPane.add(BtnGetGameCatalogue);
 
-		if (connectedUser instanceof Administrator) {			
+		if (connectedUser instanceof Administrator) {
 			LblPseudo.setText("Admin");
-			
+
 		}
 		if (connectedUser instanceof Player) {
 			Player player = (Player) user;
-						
+
 			LblCredit = new JLabel("Credit");
 			LblCredit.setBounds(325, 24, 72, 13);
 			contentPane.add(LblCredit);
 
 			LblPseudo.setText(player.getPseudo());
 			LblCredit.setText(player.getCredit() + " credit(s)");
-			
+
 			JButton BtnMyLoans = new JButton("My loans");
 			BtnMyLoans.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -112,7 +112,7 @@ public class HomeWindow extends JFrame {
 			});
 			BtnMyLoans.setBounds(10, 200, 139, 21);
 			contentPane.add(BtnMyLoans);
-			
+
 			JButton BtnMyGames = new JButton("My games");
 			BtnMyGames.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -123,7 +123,7 @@ public class HomeWindow extends JFrame {
 			});
 			BtnMyGames.setBounds(270, 200, 139, 21);
 			contentPane.add(BtnMyGames);
-			
+
 			JButton BtnMybookings = new JButton("My bookings");
 			BtnMybookings.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -134,7 +134,7 @@ public class HomeWindow extends JFrame {
 			});
 			BtnMybookings.setBounds(10, 150, 139, 21);
 			contentPane.add(BtnMybookings);
-			
+
 			JButton BtnMyborrowings = new JButton("My borrowing");
 			BtnMyborrowings.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -145,9 +145,8 @@ public class HomeWindow extends JFrame {
 			});
 			BtnMyborrowings.setBounds(10, 100, 139, 21);
 			contentPane.add(BtnMyborrowings);
-			
-			if(player.LoanAllowend() == true)
-			{
+
+			if (player.loanAllowed() == true) {
 				JButton BtnBorrow = new JButton("Borrow");
 				BtnBorrow.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -158,19 +157,15 @@ public class HomeWindow extends JFrame {
 				});
 				BtnBorrow.setBounds(10, 50, 139, 21);
 				contentPane.add(BtnBorrow);
-			}
-			else
-			{
+			} else {
 				JOptionPane.showMessageDialog(this, "You can only lend games  !");
 			}
-	
-			
-			boolean success = player.AddBirthdayBonus();
-			if(success == true)
-			{
+
+			boolean success = player.addBirthdayBonus();
+			if (success == true) {
 				JOptionPane.showMessageDialog(this, "You received 2 credits for your birthday. Happy birthday !");
 			}
-			
+
 		}
 
 	}

@@ -2,6 +2,7 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
@@ -15,13 +16,11 @@ public class VideoGame implements Serializable {
 	private int creditCost;
 	private String console;
 	private String version;
-	private ArrayList<Booking> bookings;
-	private ArrayList<Copy> copies;
+	//private ArrayList<Copy> copies;
 
 	// Constructeur
 	public VideoGame() {
-		bookings = new ArrayList<Booking>();
-		copies = new ArrayList<Copy>();
+		//copies = new ArrayList<Copy>();
 	}
 
 	// Accesseurs
@@ -57,6 +56,15 @@ public class VideoGame implements Serializable {
 	public void setCreditCost(int creditCost) {
 		this.creditCost = creditCost;
 	}
+	
+
+	/*public ArrayList<Copy> getCopies() {
+		return copies;
+	}
+
+	public void setCopies(ArrayList<Copy> copies) {
+		this.copies = copies;
+	}*/
 
 	public String getConsole() {
 		return console;
@@ -66,54 +74,59 @@ public class VideoGame implements Serializable {
 		this.console = console;
 	}
 
-	public ArrayList<Booking> getBookings() {
-		return bookings;
-	}
-
-	public void setBookings(ArrayList<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
-	public ArrayList<Copy> getCopies() {
-		return copies;
-	}
-
-	public void setCopies(ArrayList<Copy> copies) {
-		this.copies = copies;
-	}
-
 	// Methodes supplementaires
-	public Copy CopyAvailable() {
+	public Copy copyAvailable() {
 		return null;
 	}
 
-	public void SelectBooking() {
+	public void selectBooking() {
 	}
 
-	public static ArrayList<VideoGame> GetAllVideoGame() {
+	public static ArrayList<VideoGame> getAllVideoGame() {
 		int notUsed = 0;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		return VideoGameDAO.findAll(notUsed);
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+		return videoGameDAO.findAll(notUsed);
 	}
 
-	public boolean UpdateCredit() {
+	public boolean updateCredit() {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		return VideoGameDAO.update(this);
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+		return videoGameDAO.update(this);
+	}
+
+	public boolean createAVideoGame() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+		return videoGameDAO.create(this);
+	}
+
+	public boolean delete() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+		return videoGameDAO.delete(this);
+	}
+
+	// Methode de base
+	@Override
+	public int hashCode() {
+		return Objects.hash(console, creditCost, idVideoGame, name, version);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VideoGame other = (VideoGame) obj;
+		return Objects.equals(console, other.console) && creditCost == other.creditCost
+				&& idVideoGame == other.idVideoGame && Objects.equals(name, other.name)
+				&& Objects.equals(version, other.version);
 	}
 	
-	public boolean CreateAVideoGame()
-	{
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		return VideoGameDAO.create(this);
-	}
-
-	public boolean Delete() {
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> VideoGameDAO = adf.getVideoGameDAO();
-		return VideoGameDAO.delete(this);
-	}
+	
 
 }
