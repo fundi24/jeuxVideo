@@ -71,7 +71,7 @@ public class PlayerDAO extends DAO<Player> {
 
 		if (day == dayBirthday && month == monthBirthday) {
 			try {
-				boolean ReceivedBirthdayGift = hasReceivedBirthdayGift(obj);
+				boolean ReceivedBirthdayGift = HasReceivedBirthdayGift(obj);
 				if (ReceivedBirthdayGift == false) {
 					PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 					pstmt.executeUpdate();
@@ -200,25 +200,27 @@ public class PlayerDAO extends DAO<Player> {
 		}
 		return isValid;
 	}
-
-	public boolean hasReceivedBirthdayGift(Player player) {
+	
+	public boolean HasReceivedBirthdayGift(Player player)
+	{
 		boolean received = false;
 		int id = player.getIdUser();
-
+		
 		String query = "SELECT * FROM User WHERE IdUser='" + id + "'";
 		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
 			if (result.first()) {
 				boolean isReceived = result.getBoolean("ReceivedBirthdayGift");
-				if (isReceived == true) {
+				if(isReceived == true)
+				{
 					received = true;
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return received;
 	}
 

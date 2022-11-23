@@ -112,7 +112,7 @@ public class CopyDAO extends DAO<Copy> {
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				isValid = false;
-				JOptionPane.showMessageDialog(null, "There is a loan in progress !");
+				JOptionPane.showMessageDialog(null, "This game is on loan !");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

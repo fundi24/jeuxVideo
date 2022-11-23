@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.CopyDAO;
 import be.poshi.dao.DAO;
 
 public class Copy implements Serializable {
@@ -57,7 +58,9 @@ public class Copy implements Serializable {
 	}
 
 	public boolean isAvailable() {
-		return false;
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Copy> copyDAO = adf.getCopyDAO();
+		return  ((CopyDAO)copyDAO).checkForLoan(this.getIdCopy());
 	}
 
 	public boolean createACopy() {
@@ -78,13 +81,10 @@ public class Copy implements Serializable {
 		return copyDAO.findAll(user.getIdUser());
 	}
 	
-	public static ArrayList<Copy> getAllCopyOfAGame(User user, VideoGame videogame)
+	/*public static ArrayList<Copy> getAllCopyOfAGame(User user, VideoGame videogame)
 	{
 		ArrayList<Copy> copiesOfAGame = new ArrayList<Copy>();
-		
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> copyDAO = adf.getCopyDAO();
-		ArrayList<Copy> copies = copyDAO.findAll(user.getIdUser());
+		ArrayList<Copy> copies = getAllCopy(user);
 		
 		for(Copy c : copies)
 		{
@@ -94,6 +94,6 @@ public class Copy implements Serializable {
 		
 		return copiesOfAGame;
 		
-	}
+	}*/
 
 }
