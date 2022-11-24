@@ -14,8 +14,16 @@ public class Copy implements Serializable {
 	private int idCopy;
 	private VideoGame videoGame;
 	private Player owner;
+	private Loan loan;
 
 	// Constructeurs
+	public Copy(VideoGame videoGame, Player owner, Loan loan)
+	{
+		this.videoGame = videoGame;
+		this.owner = owner;
+		this.loan = loan;
+	}
+	
 	public Copy(VideoGame videoGame, Player owner) {
 		this.videoGame = videoGame;
 		this.owner = owner;
@@ -42,6 +50,14 @@ public class Copy implements Serializable {
 		this.videoGame = videoGame;
 	}
 
+	public Loan getLoan() {
+		return loan;
+	}
+
+	public void setLoan(Loan loan) {
+		this.loan = loan;
+	}
+
 	public Player getOwner() {
 		return owner;
 	}
@@ -52,15 +68,20 @@ public class Copy implements Serializable {
 
 	// Methodes supplementaires
 	public void releaseCopy() {
+		this.loan = null;
 	}
 
 	public void borrow() {
 	}
 
 	public boolean isAvailable() {
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> copyDAO = adf.getCopyDAO();
-		return  ((CopyDAO)copyDAO).checkForLoan(this.getIdCopy());
+		boolean isValid = true;
+		
+		if(this.loan==null || this.loan.getOngoing() == true)
+		{
+			isValid = false;
+		}
+		return isValid;
 	}
 
 	public boolean createACopy() {

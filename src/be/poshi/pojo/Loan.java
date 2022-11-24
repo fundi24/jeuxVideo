@@ -29,6 +29,10 @@ public class Loan implements Serializable {
 	public Loan(Copy copy) {
 		this.copy = copy;
 	}
+	
+	public Loan() {
+		
+	}
 
 	// Accesseurs
 	public LocalDate getStartDate() {

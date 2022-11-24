@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
+import be.poshi.pojo.Player;
 import be.poshi.pojo.VideoGame;
 
 public class CopyDAO extends DAO<Copy> {
@@ -68,6 +69,8 @@ public class CopyDAO extends DAO<Copy> {
 		Copy copy = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+		
+		String query = "SELECT * FROM Copy INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdCopy ='" + id + "' ORDER BY Loan.EndDate DESC ";
 
 		try {
 			ResultSet result = this.connect
@@ -82,6 +85,23 @@ public class CopyDAO extends DAO<Copy> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		// recuperer loan
+			try {
+				ResultSet result = this.connect
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
+				if (result.first()) {
+					Loan loan = new Loan();
+					loan.setIdLoan(result.getInt("IdLoan"));
+					loan.setStartDate(result.getDate("StartDate").toLocalDate());
+					loan.setEndDate(result.getDate("EndDate").toLocalDate());
+					loan.setOngoing(result.getBoolean("OnGoing"));
+					copy.setLoan(loan);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	
 		return copy;
 	}
 

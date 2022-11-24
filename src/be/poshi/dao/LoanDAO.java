@@ -98,7 +98,7 @@ public class LoanDAO extends DAO<Loan> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = " + id);
+							"SELECT TOP 1 * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = " + id);
 			if (result.first()) {
 				Player borrower = new Player();
 				borrower.setIdUser(result.getInt("IdUser"));
