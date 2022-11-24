@@ -65,9 +65,8 @@ public class PlayerDAO extends DAO<Player> {
 		int day = today.getDayOfMonth();
 		Month month = today.getMonth();
 
-		String query = "UPDATE User SET Credit='" + obj.getCredit() + "', ReceivedBirthdayGift = true WHERE IdUser='"
-				+ obj.getIdUser() + "'";
-		String query2 = "UPDATE User SET ReceivedBirthdayGift = false WHERE IdUser='" + obj.getIdUser() + "'";
+		String query = "UPDATE User SET Credit='" + obj.getCredit() + "', ReceivedBirthdayGift = true WHERE IdUser='" + obj.getIdUser() + "'";
+		String query2 = "UPDATE User SET Credit='" + obj.getCredit() + "', ReceivedBirthdayGift = false WHERE IdUser='" + obj.getIdUser() + "'";
 
 		if (day == dayBirthday && month == monthBirthday) {
 			try {

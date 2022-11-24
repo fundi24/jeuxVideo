@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
+import be.poshi.pojo.Player;
+import be.poshi.pojo.VideoGame;
 
 public class LoanDAO extends DAO<Loan> {
 
@@ -47,6 +49,8 @@ public class LoanDAO extends DAO<Loan> {
 	@Override
 	public boolean update(Loan obj) {
 		boolean success = false;
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Player> playerDAO = adf.getPlayerDAO();
 
 		String query = "UPDATE Loan SET OnGoing = false WHERE IdLoan ='" + obj.getIdLoan() + "'";
 
@@ -54,6 +58,8 @@ public class LoanDAO extends DAO<Loan> {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			pstmt.executeUpdate();
 			pstmt.close();
+			playerDAO.update(obj.getLender());
+			playerDAO.update(obj.getBorrower());
 			success = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -67,6 +73,7 @@ public class LoanDAO extends DAO<Loan> {
 		Loan loan = null;
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<Copy> copyDAO = adf.getCopyDAO();
+		DAO<Player> playerDAO = adf.getPlayerDAO();
 
 		try {
 			ResultSet result = this.connect
@@ -82,6 +89,22 @@ public class LoanDAO extends DAO<Loan> {
 				loan.setStartDate(result.getDate("StartDate").toLocalDate());
 				loan.setEndDate(result.getDate("EndDate").toLocalDate());
 				loan.setOngoing(result.getBoolean("OnGoing"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// recuperer borrower
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+							"SELECT * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = " + id);
+			if (result.first()) {
+				Player borrower = new Player();
+				borrower.setIdUser(result.getInt("IdUser"));
+				borrower.setCredit(result.getInt("Credit"));
+				borrower.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
+				loan.setBorrower(borrower);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

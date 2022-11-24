@@ -2,6 +2,7 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
@@ -17,6 +18,7 @@ public class Loan implements Serializable {
 	private boolean ongoing;
 	private Copy copy;
 	private Player borrower;
+	private Player lender;
 
 	// Constructeurs
 	public Loan(Copy copy, Player borrower) {
@@ -68,6 +70,14 @@ public class Loan implements Serializable {
 	public void setCopy(Copy copy) {
 		this.copy = copy;
 	}
+	
+	public Player getLender() {
+		return lender;
+	}
+
+	public void setLender(Player lender) {
+		this.lender = lender;
+	}
 
 	public Player getBorrower() {
 		return borrower;
@@ -78,13 +88,33 @@ public class Loan implements Serializable {
 	}
 
 	// Methodes supplementaires
-	public void calculateBalance() {
+	public boolean calculateBalance() {
+		
+		LocalDate today = LocalDate.now();
+		int differenceInDays = (int)ChronoUnit.DAYS.between(endDate, today);
+		int weeks = (differenceInDays / 7) + 1;
+		int credit = copy.getVideoGame().getCreditCost();
+		int costOfTheLoan = credit * weeks;
+		int fine = 0;
+		int newCreditLender = 0;
+		int newCreditBorrower = 0;
+		for (int i = 1; i<= weeks ; i++)
+		{
+			fine = 5 * differenceInDays;
+		}
+		
+		newCreditLender = lender.getCredit() + costOfTheLoan + fine;
+		newCreditBorrower = borrower.getCredit() - costOfTheLoan - fine;
+		lender.setCredit(newCreditLender);
+		borrower.setCredit(newCreditBorrower);
+		
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Loan> loanDAO = adf.getLoanDAO();
+		return loanDAO.update(this);
 	}
 
 	public void endLoan() {
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Loan> loanDAO = adf.getLoanDAO();
-		loanDAO.update(this);
+		setOngoing(false);
 	}
 
 	public boolean makeLoan() {
