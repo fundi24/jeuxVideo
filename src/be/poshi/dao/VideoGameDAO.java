@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import be.poshi.pojo.Booking;
+import be.poshi.pojo.Copy;
+import be.poshi.pojo.Loan;
+import be.poshi.pojo.Player;
 import be.poshi.pojo.VideoGame;
 
 public class VideoGameDAO extends DAO<VideoGame> {
@@ -88,8 +92,14 @@ public class VideoGameDAO extends DAO<VideoGame> {
 	@Override
 	public VideoGame find(int id) {
 		VideoGame videoGame = null;
+		Booking booking = null;
+		Copy copy = null;
+		Loan loan = null;
 
 		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '" + id + "'";
+		String query2 = "SELECT * FROM (VideoGame INNER JOIN Booking ON VideoGame.IdVideoGame = Booking.IdVideoGame) INNER JOIN User ON Booking.IdUser = User.IdUser WHERE VideoGame.IdVideoGame = '" + id + "'";
+		String query3 = "SELECT TOP 1 * FROM (VideoGame INNER JOIN Copy ON VideoGame.IdVideoGame = Copy.IdVideoGame) INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE VideoGame.IdVideoGame = '" + id + "' ORDER BY Loan.EndDate DESC ";
+		
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
@@ -104,6 +114,47 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		// recuperer bookings et son player
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query2);
+			while (result.next()) {
+				booking = new Booking();
+				booking.setIdBooking(result.getInt("IdBooking"));
+				booking.setBookingDate(result.getDate("BookingDate").toLocalDate());
+				booking.setNumberOfWeeks(result.getInt("NumberOfWeeks"));
+				Player player = new Player();
+				player.setIdUser(result.getInt("IdUser"));
+				player.setRegistrationDate(result.getDate("RegistrationDate").toLocalDate());
+				player.setDateOfBirth(result.getDate("DateOfBirth").toLocalDate());
+				player.setCredit(result.getInt("Credit"));
+				booking.setPlayer(player);
+				videoGame.getBookings().add(booking);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// recuperer copies
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query3);
+			while (result.next()) {
+				copy = new Copy();
+				copy.setIdCopy(result.getInt("IdCopy"));
+				loan = new Loan();
+				loan.setIdLoan(result.getInt("IdLoan"));
+				loan.setStartDate(result.getDate("StartDate").toLocalDate());
+				loan.setEndDate(result.getDate("EndDate").toLocalDate());
+				loan.setOngoing(result.getBoolean("OnGoing"));
+				copy.setLoan(loan);
+				videoGame.getCopies().add(copy);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+					
 		return videoGame;
 
 	}

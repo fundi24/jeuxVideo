@@ -39,11 +39,9 @@ public class UserDAO extends DAO<User> {
 	public static User login(String username, String password) throws Exception {
 		User user = null;
 		Connection conn = DatabaseConnection.getInstance();
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Administrator> administratorDAO = adf.getAdministratorDAO();
-		DAO<Player> playerDAO = adf.getPlayerDAO();
-
+		
 		String query = "SELECT * FROM User WHERE Username='" + username + "' AND Password='" + password + "'";
+		
 		try {
 			ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery(query);
@@ -51,8 +49,10 @@ public class UserDAO extends DAO<User> {
 				int id = result.getInt("IdUser");
 				boolean isAdmin = result.getBoolean("Administrator");
 				if (isAdmin == true) {
+					AdministratorDAO administratorDAO = new AdministratorDAO(conn);
 					user = administratorDAO.find(id);
 				} else {
+					PlayerDAO playerDAO = new PlayerDAO(conn);
 					user = playerDAO.find(id);
 				}
 			} else {

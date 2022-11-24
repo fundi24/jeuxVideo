@@ -2,6 +2,7 @@ package be.poshi.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import be.poshi.dao.AbstractDAOFactory;
@@ -16,11 +17,14 @@ public class VideoGame implements Serializable {
 	private int creditCost;
 	private String console;
 	private String version;
-	//private ArrayList<Copy> copies;
+	private ArrayList<Copy> copies;
+	private ArrayList<Booking> bookings;
 
+	
 	// Constructeur
 	public VideoGame() {
-		//copies = new ArrayList<Copy>();
+		copies = new ArrayList<Copy>();
+		bookings = new ArrayList<Booking>();
 	}
 
 	// Accesseurs
@@ -58,13 +62,21 @@ public class VideoGame implements Serializable {
 	}
 	
 
-	/*public ArrayList<Copy> getCopies() {
+	public ArrayList<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(ArrayList<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public ArrayList<Copy> getCopies() {
 		return copies;
 	}
 
 	public void setCopies(ArrayList<Copy> copies) {
 		this.copies = copies;
-	}*/
+	}
 
 	public String getConsole() {
 		return console;
@@ -76,10 +88,38 @@ public class VideoGame implements Serializable {
 
 	// Methodes supplementaires
 	public Copy copyAvailable() {
+		for(Copy c : copies)
+		{
+			if(c.isAvailable() == true)
+			{
+				return c;
+			}
+		}
 		return null;
 	}
 
 	public void selectBooking() {
+				
+		int maxCredit = bookings.get(0).getPlayer().getCredit();
+		int temp =0;
+		int index1=0;
+		
+		for(int i=0; i<bookings.size(); i++)
+		{
+			temp = bookings.get(i).getPlayer().getCredit();
+			if( temp > maxCredit)
+			{
+				maxCredit = temp;
+				index1 = i;
+			}
+			if(temp == maxCredit)
+			{
+				
+			}
+		}
+		bookings.get(index1);
+		
+		 
 	}
 
 	public static ArrayList<VideoGame> getAllVideoGame() {
@@ -112,21 +152,5 @@ public class VideoGame implements Serializable {
 	public int hashCode() {
 		return Objects.hash(console, creditCost, idVideoGame, name, version);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		VideoGame other = (VideoGame) obj;
-		return Objects.equals(console, other.console) && creditCost == other.creditCost
-				&& idVideoGame == other.idVideoGame && Objects.equals(name, other.name)
-				&& Objects.equals(version, other.version);
-	}
-	
-	
 
 }

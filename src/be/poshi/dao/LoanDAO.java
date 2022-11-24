@@ -49,8 +49,6 @@ public class LoanDAO extends DAO<Loan> {
 	@Override
 	public boolean update(Loan obj) {
 		boolean success = false;
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Player> playerDAO = adf.getPlayerDAO();
 
 		String query = "UPDATE Loan SET OnGoing = false WHERE IdLoan ='" + obj.getIdLoan() + "'";
 
@@ -58,6 +56,7 @@ public class LoanDAO extends DAO<Loan> {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			pstmt.executeUpdate();
 			pstmt.close();
+			PlayerDAO playerDAO = new PlayerDAO(this.connect);
 			playerDAO.update(obj.getLender());
 			playerDAO.update(obj.getBorrower());
 			success = true;
@@ -71,17 +70,17 @@ public class LoanDAO extends DAO<Loan> {
 	@Override
 	public Loan find(int id) {
 		Loan loan = null;
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Copy> copyDAO = adf.getCopyDAO();
-		DAO<Player> playerDAO = adf.getPlayerDAO();
 
+		String query1 = "SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = '" + id + "'";
+		String query2 = "SELECT TOP 1 * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = '" + id + "'";
+		
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = " + id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query1);
 			if (result.first()) {
 				int idCopy = result.getInt("IdCopy");
 
+				CopyDAO copyDAO = new CopyDAO(this.connect);
 				Copy copy = copyDAO.find(idCopy);
 
 				loan = new Loan(copy);
@@ -97,8 +96,7 @@ public class LoanDAO extends DAO<Loan> {
 		// recuperer borrower
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT TOP 1 * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = " + id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query2);
 			if (result.first()) {
 				Player borrower = new Player();
 				borrower.setIdUser(result.getInt("IdUser"));

@@ -34,6 +34,7 @@ public class BookingDAO extends DAO<Booking> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return success;
 	}
 
@@ -63,15 +64,15 @@ public class BookingDAO extends DAO<Booking> {
 	@Override
 	public Booking find(int id) {
 		Booking booking = null;
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
+
+		String query = "SELECT * FROM Booking WHERE IdBooking =  '" + id + "'";
 
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM Booking WHERE IdBooking = " + id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
 			if (result.first()) {
 				int idVideoGame = result.getInt("IdVideoGame");
+				VideoGameDAO videoGameDAO = new VideoGameDAO(this.connect);
 				VideoGame vg = videoGameDAO.find(idVideoGame);
 				booking = new Booking(vg);
 				booking.setIdBooking(id);
@@ -80,6 +81,7 @@ public class BookingDAO extends DAO<Booking> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return booking;
 	}
 

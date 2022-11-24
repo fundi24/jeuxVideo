@@ -46,6 +46,7 @@ public class PlayerDAO extends DAO<Player> {
 				e.printStackTrace();
 			}
 		}
+		
 		return success;
 	}
 
@@ -95,14 +96,19 @@ public class PlayerDAO extends DAO<Player> {
 
 	@Override
 	public Player find(int id) {
-
 		Player player = null;
-
+		
+		String query1 = "SELECT * FROM User WHERE IdUser = '" + id + "'";
+		String query2 = "SELECT * FROM User INNER JOIN Copy ON User.IdUser = Copy.IdUser WHERE User.IdUser = '" + id + "'";
+		String query3 = "SELECT * FROM User INNER JOIN Booking ON User.IdUser = Booking.IdUser WHERE User.IdUser = '" + id + "'";
+		String query4 = "SELECT * FROM User INNER JOIN Loan ON User.IdUser = Loan.IdUser WHERE User.IdUser = '" + id +"'";
+		String query5 = "SELECT * FROM (User INNER JOIN Copy ON User.IdUser = Copy.IdUser) INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdUser = '"+ id + "'";
+		
 		// recuperer player
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
+					.executeQuery(query1);
 			if (result.first()) {
 				player = new Player();
 				player.setIdUser(id);
@@ -120,8 +126,7 @@ public class PlayerDAO extends DAO<Player> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User INNER JOIN Copy ON User.IdUser = Copy.IdUser WHERE User.IdUser = "
-							+ id);
+					.executeQuery(query2);
 			CopyDAO copyDAO = new CopyDAO(this.connect);
 			while (result.next()) {
 				player.getCopies().add(copyDAO.find(result.getInt("IdCopy")));
@@ -134,9 +139,7 @@ public class PlayerDAO extends DAO<Player> {
 		// recuperer ses bookings
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT * FROM User INNER JOIN Booking ON User.IdUser = Booking.IdUser WHERE User.IdUser = "
-									+ id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query3);
 			BookingDAO bookingDAO = new BookingDAO(this.connect);
 			while (result.next()) {
 				player.getBookings().add(bookingDAO.find(result.getInt("IdBooking")));
@@ -150,8 +153,7 @@ public class PlayerDAO extends DAO<Player> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User INNER JOIN Loan ON User.IdUser = Loan.IdUser WHERE User.IdUser = "
-							+ id);
+					.executeQuery(query4);
 			LoanDAO loanDAO = new LoanDAO(this.connect);
 			while (result.next()) {
 				player.getBorrowings().add(loanDAO.find(result.getInt("IdLoan")));
@@ -164,9 +166,7 @@ public class PlayerDAO extends DAO<Player> {
 		// recuperer ses prets
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT * FROM (User INNER JOIN Copy ON User.IdUser = Copy.IdUser) INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdUser = "
-									+ id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query5);
 			LoanDAO loanDAO = new LoanDAO(this.connect);
 			while (result.next()) {
 				player.getLoans().add(loanDAO.find(result.getInt("IdLoan")));
@@ -186,7 +186,9 @@ public class PlayerDAO extends DAO<Player> {
 
 	public boolean checkIfUsernameIsAvailable(String username) {
 		boolean isValid = true;
+		
 		String query = "SELECT * FROM User WHERE Username='" + username + "'";
+		
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);

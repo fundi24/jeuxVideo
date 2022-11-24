@@ -41,6 +41,7 @@ public class CopyDAO extends DAO<Copy> {
 	@Override
 	public boolean delete(Copy obj) {
 		boolean success = false;
+
 		String query = "DELETE FROM Copy WHERE IdCopy ='" + obj.getIdCopy() + "'";
 
 		boolean isValid = checkForLoan(obj.getIdCopy());
@@ -67,17 +68,19 @@ public class CopyDAO extends DAO<Copy> {
 	@Override
 	public Copy find(int id) {
 		Copy copy = null;
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
-		
-		String query = "SELECT * FROM Copy INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdCopy ='" + id + "' ORDER BY Loan.EndDate DESC ";
+		Loan loan = null;
+
+		String query1 = "SELECT * FROM Copy WHERE IdCopy = '" + id + "'";
+		String query2 = "SELECT TOP 1 * FROM Copy INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdCopy ='"
+				+ id + "' ORDER BY Loan.EndDate DESC ";
 
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM Copy WHERE IdCopy = " + id);
+					.executeQuery(query1);
 			if (result.first()) {
 				int idVideoGame = result.getInt("IdVideoGame");
+				VideoGameDAO videoGameDAO = new VideoGameDAO(this.connect);
 				VideoGame vg = videoGameDAO.find(idVideoGame);
 				copy = new Copy(vg);
 				copy.setIdCopy(id);
@@ -85,23 +88,24 @@ public class CopyDAO extends DAO<Copy> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// recuperer loan
-			try {
-				ResultSet result = this.connect
-						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
-				if (result.first()) {
-					Loan loan = new Loan();
-					loan.setIdLoan(result.getInt("IdLoan"));
-					loan.setStartDate(result.getDate("StartDate").toLocalDate());
-					loan.setEndDate(result.getDate("EndDate").toLocalDate());
-					loan.setOngoing(result.getBoolean("OnGoing"));
-					copy.setLoan(loan);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query2);
+			if (result.first()) {
+				loan = new Loan();
+				loan.setIdLoan(result.getInt("IdLoan"));
+				loan.setStartDate(result.getDate("StartDate").toLocalDate());
+				loan.setEndDate(result.getDate("EndDate").toLocalDate());
+				loan.setOngoing(result.getBoolean("OnGoing"));
+				copy.setLoan(loan);
 			}
-	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return copy;
 	}
 
@@ -110,6 +114,7 @@ public class CopyDAO extends DAO<Copy> {
 		ArrayList<Copy> copies = new ArrayList<Copy>();
 
 		String query = "SELECT * FROM Copy WHERE NOT Copy.IdUser = '" + id + "'";
+		
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
@@ -121,12 +126,15 @@ public class CopyDAO extends DAO<Copy> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return copies;
 	}
 
 	public boolean checkForLoan(int id) {
 		boolean isValid = true;
+		
 		String query = "SELECT * FROM Loan WHERE IdCopy='" + id + "' AND OnGoing = True";
+		
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
@@ -137,6 +145,7 @@ public class CopyDAO extends DAO<Copy> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return isValid;
 	}
 

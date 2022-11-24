@@ -32,6 +32,8 @@ public class Copy implements Serializable {
 	public Copy(VideoGame videoGame) {
 		this.videoGame = videoGame;
 	}
+	
+	public Copy() {}
 
 	// Accesseurs
 	public int getIdCopy() {
@@ -102,19 +104,4 @@ public class Copy implements Serializable {
 		return copyDAO.findAll(user.getIdUser());
 	}
 	
-	/*public static ArrayList<Copy> getAllCopyOfAGame(User user, VideoGame videogame)
-	{
-		ArrayList<Copy> copiesOfAGame = new ArrayList<Copy>();
-		ArrayList<Copy> copies = getAllCopy(user);
-		
-		for(Copy c : copies)
-		{
-			if(c.videoGame.equals(videogame))
-			copiesOfAGame.add(c);
-		}
-		
-		return copiesOfAGame;
-		
-	}*/
-
 }

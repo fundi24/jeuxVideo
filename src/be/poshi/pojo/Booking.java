@@ -25,6 +25,11 @@ public class Booking implements Serializable {
 	public Booking(VideoGame videoGame) {
 		this.videoGame = videoGame;
 	}
+	
+	public Booking()
+	{
+		
+	}
 
 	// Accesseurs
 	public LocalDate getBookingDate() {

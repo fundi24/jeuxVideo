@@ -31,10 +31,13 @@ public class AdministratorDAO extends DAO<Administrator> {
 	@Override
 	public Administrator find(int id) {
 		Administrator administrator = null;
+		
+		String query = "SELECT * FROM User WHERE IdUser ='" + id + "'";
+
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM User WHERE IdUser = " + id);
+					.executeQuery(query);
 			if (result.first()) {
 				administrator = new Administrator();
 				administrator.setIdUser(id);
@@ -42,6 +45,7 @@ public class AdministratorDAO extends DAO<Administrator> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return administrator;
 	}
 

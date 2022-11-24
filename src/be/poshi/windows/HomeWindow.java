@@ -146,20 +146,16 @@ public class HomeWindow extends JFrame {
 			BtnMyborrowings.setBounds(10, 100, 139, 21);
 			contentPane.add(BtnMyborrowings);
 
-			if (player.loanAllowed() == true) {
-				JButton BtnBorrow = new JButton("Borrow");
-				BtnBorrow.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						BorrowWindow BW = new BorrowWindow(connectedUser);
-						BW.setVisible(true);
-						dispose();
-					}
-				});
-				BtnBorrow.setBounds(10, 50, 139, 21);
-				contentPane.add(BtnBorrow);
-			} else {
-				JOptionPane.showMessageDialog(this, "You can only lend games  !");
-			}
+			JButton BtnBorrow = new JButton("The copies");
+			BtnBorrow.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					BorrowWindow BW = new BorrowWindow(connectedUser);
+					BW.setVisible(true);
+					dispose();
+				}
+			});
+			BtnBorrow.setBounds(10, 50, 139, 21);
+			contentPane.add(BtnBorrow);
 
 			boolean success = player.addBirthdayBonus();
 			if (success == true) {
