@@ -21,6 +21,12 @@ public class Loan implements Serializable {
 	private Player lender;
 
 	// Constructeurs
+	public Loan(Copy copy, Player borrower, Player lender) {
+		this.copy = copy;
+		this.borrower = borrower;
+		this.lender = lender;
+	}
+	
 	public Loan(Copy copy, Player borrower) {
 		this.copy = copy;
 		this.borrower = borrower;

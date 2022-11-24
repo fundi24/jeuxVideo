@@ -1,6 +1,7 @@
 package be.poshi.pojo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -103,10 +104,12 @@ public class VideoGame implements Serializable {
 		int maxCredit = bookings.get(0).getPlayer().getCredit();
 		int temp =0;
 		int index1=0;
+		int index2=0;
 		
-		for(int i=0; i<bookings.size(); i++)
+		for(int i=1; i<bookings.size(); i++)
 		{
 			temp = bookings.get(i).getPlayer().getCredit();
+			LocalDate date = LocalDate.now();
 			if( temp > maxCredit)
 			{
 				maxCredit = temp;
@@ -114,7 +117,14 @@ public class VideoGame implements Serializable {
 			}
 			if(temp == maxCredit)
 			{
-				
+				index1=i;
+				index2=i+1;
+				LocalDate playerDate1 = bookings.get(index1).getBookingDate();
+				LocalDate playerDate2 = bookings.get(index2).getBookingDate();
+				if(playerDate1.isBefore(playerDate2))
+				{
+					//bookings.get(index1).
+				}
 			}
 		}
 		bookings.get(index1);
@@ -145,12 +155,6 @@ public class VideoGame implements Serializable {
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 		DAO<VideoGame> videoGameDAO = adf.getVideoGameDAO();
 		return videoGameDAO.delete(this);
-	}
-
-	// Methode de base
-	@Override
-	public int hashCode() {
-		return Objects.hash(console, creditCost, idVideoGame, name, version);
 	}
 
 }

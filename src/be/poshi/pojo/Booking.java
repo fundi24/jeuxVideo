@@ -11,8 +11,8 @@ public class Booking implements Serializable {
 	// Attributs
 	private static final long serialVersionUID = -2547447650772941403L;
 	private int idBooking;
-	private int NumberOfWeeks;
 	private LocalDate bookingDate;
+	private int NumberOfWeeks;
 	private Player player;
 	private VideoGame videoGame;
 
