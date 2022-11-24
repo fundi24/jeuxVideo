@@ -20,13 +20,14 @@ public class BookingDAO extends DAO<Booking> {
 	public boolean create(Booking obj) {
 		boolean success = false;
 
-		String query = "INSERT INTO Booking (BookingDate, IdUser, IdVideoGame) VALUES (?,?,?)";
+		String query = "INSERT INTO Booking (BookingDate, NumberOfWeeks, IdUser, IdVideoGame) VALUES (?,?,?,?)";
 
 		try {
 			PreparedStatement pstmt = (PreparedStatement) this.connect.prepareStatement(query);
 			pstmt.setDate(1, Date.valueOf(obj.getBookingDate()));
-			pstmt.setInt(2, obj.getPlayer().getIdUser());
-			pstmt.setInt(3, obj.getVideoGame().getIdVideoGame());
+			pstmt.setInt(2, obj.getNumberOfWeeks());
+			pstmt.setInt(3, obj.getPlayer().getIdUser());
+			pstmt.setInt(4, obj.getVideoGame().getIdVideoGame());
 			pstmt.execute();
 			pstmt.close();
 			success = true;

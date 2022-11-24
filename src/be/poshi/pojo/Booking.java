@@ -11,6 +11,7 @@ public class Booking implements Serializable {
 	// Attributs
 	private static final long serialVersionUID = -2547447650772941403L;
 	private int idBooking;
+	private int NumberOfWeeks;
 	private LocalDate bookingDate;
 	private Player player;
 	private VideoGame videoGame;
@@ -40,6 +41,14 @@ public class Booking implements Serializable {
 
 	public void setIdBooking(int idBooking) {
 		this.idBooking = idBooking;
+	}
+
+	public int getNumberOfWeeks() {
+		return NumberOfWeeks;
+	}
+
+	public void setNumberOfWeeks(int numberOfWeeks) {
+		NumberOfWeeks = numberOfWeeks;
 	}
 
 	public Player getPlayer() {
