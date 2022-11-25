@@ -75,7 +75,6 @@ public class Copy implements Serializable {
 	public boolean borrow() {
 		loan.setCopy(this);
 		return this.loan.makeLoan();
-
 	}
 
 	public boolean isAvailable() {
