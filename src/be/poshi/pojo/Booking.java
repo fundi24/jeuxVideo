@@ -3,27 +3,32 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Booking implements Serializable{
+import be.poshi.dao.AbstractDAOFactory;
+import be.poshi.dao.DAO;
+
+public class Booking implements Serializable {
 
 	// Attributs
 	private static final long serialVersionUID = -2547447650772941403L;
 	private int idBooking;
 	private LocalDate bookingDate;
+	private int NumberOfWeeks;
 	private Player player;
 	private VideoGame videoGame;
 
 	// Constructeurs
-	public Booking(int idBooking, Player player, VideoGame videoGame) {
-		this.idBooking = idBooking;
+	public Booking(Player player, VideoGame videoGame) {
 		this.player = player;
 		this.videoGame = videoGame;
 	}
 
-	public Booking(int idBooking, LocalDate bookingDate, Player player, VideoGame videoGame) {
-		this.idBooking = idBooking;
-		this.bookingDate = bookingDate;
-		this.player = player;
+	public Booking(VideoGame videoGame) {
 		this.videoGame = videoGame;
+	}
+	
+	public Booking()
+	{
+		
 	}
 
 	// Accesseurs
@@ -35,14 +40,49 @@ public class Booking implements Serializable{
 		this.bookingDate = bookingDate;
 	}
 
-	// Methodes supplementaires
-	public void Delete() {
+	public int getIdBooking() {
+		return idBooking;
 	}
 
-	// Methode de base
-	@Override
-	public String toString() {
-		return "Booking [bookingDate=" + bookingDate + ", player=" + player + ", videoGame=" + videoGame + "]";
+	public void setIdBooking(int idBooking) {
+		this.idBooking = idBooking;
+	}
+
+	public int getNumberOfWeeks() {
+		return NumberOfWeeks;
+	}
+
+	public void setNumberOfWeeks(int numberOfWeeks) {
+		NumberOfWeeks = numberOfWeeks;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public VideoGame getVideoGame() {
+		return videoGame;
+	}
+
+	public void setVideoGame(VideoGame videoGame) {
+		this.videoGame = videoGame;
+	}
+
+	// Methodes supplementaires
+	public boolean makeABooking() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Booking> bookingDAO = adf.getBookingDAO();
+		return bookingDAO.create(this);
+	}
+
+	public boolean delete() {
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+		DAO<Booking> bookingDAO = adf.getBookingDAO();
+		return bookingDAO.delete(this);
 	}
 
 }

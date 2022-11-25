@@ -1,6 +1,9 @@
 package be.poshi.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import be.poshi.pojo.Administrator;
 
@@ -27,6 +30,27 @@ public class AdministratorDAO extends DAO<Administrator> {
 
 	@Override
 	public Administrator find(int id) {
+		Administrator administrator = null;
+		
+		String query = "SELECT * FROM User WHERE IdUser ='" + id + "'";
+
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery(query);
+			if (result.first()) {
+				administrator = new Administrator();
+				administrator.setIdUser(id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return administrator;
+	}
+
+	@Override
+	public ArrayList<Administrator> findAll(int id) {
 		return null;
 	}
 
