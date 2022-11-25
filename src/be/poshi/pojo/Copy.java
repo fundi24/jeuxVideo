@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
-import be.poshi.dao.CopyDAO;
 import be.poshi.dao.DAO;
 
 public class Copy implements Serializable {
@@ -70,16 +69,19 @@ public class Copy implements Serializable {
 
 	// Methodes supplementaires
 	public void releaseCopy() {
-		this.loan = null;
+		this.loan = new Loan();
 	}
 
-	public void borrow() {
+	public boolean borrow() {
+		loan.setCopy(this);
+		return this.loan.makeLoan();
+
 	}
 
 	public boolean isAvailable() {
 		boolean isValid = true;
 		
-		if(this.loan==null || this.loan.getOngoing() == true)
+		if(this.loan == null || this.loan.getOngoing() == true)
 		{
 			isValid = false;
 		}

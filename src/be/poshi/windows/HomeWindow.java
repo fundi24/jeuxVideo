@@ -61,13 +61,12 @@ public class HomeWindow extends JFrame {
 		getContentPane().add(LblHomePage);
 
 		LblPseudo = new JLabel("Pseudo");
-		LblPseudo.setBounds(352, 10, 45, 13);
+		LblPseudo.setBounds(330, 10, 150, 13);
 		contentPane.add(LblPseudo);
 
 		JButton BtnLogout = new JButton("Logout");
 		BtnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				connectedUser = null;
 				LoginWindow loginWindow = new LoginWindow();
 				JOptionPane.showMessageDialog(null, "You are log out");
 				loginWindow.setVisible(true);
@@ -158,7 +157,7 @@ public class HomeWindow extends JFrame {
 			contentPane.add(BtnBorrow);
 
 			boolean success = player.addBirthdayBonus();
-			if (success == true) {
+			if (success) {
 				JOptionPane.showMessageDialog(this, "You received 2 credits for your birthday. Happy birthday !");
 			}
 

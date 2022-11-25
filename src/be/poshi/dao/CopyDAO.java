@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
-import be.poshi.pojo.Player;
 import be.poshi.pojo.VideoGame;
 
 public class CopyDAO extends DAO<Copy> {
@@ -105,7 +104,6 @@ public class CopyDAO extends DAO<Copy> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return copy;
 	}
 

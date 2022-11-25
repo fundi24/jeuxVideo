@@ -3,7 +3,6 @@ package be.poshi.pojo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 
 import be.poshi.dao.AbstractDAOFactory;
 import be.poshi.dao.DAO;
