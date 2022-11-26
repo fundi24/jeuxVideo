@@ -125,8 +125,10 @@ public class Loan implements Serializable {
 		int oldCredit = 0;
 		int newCredit = 0;
 		int tempCredit = 0;
+		LocalDate tempDate = this.startDate;
 
-		if (copy.getVideoGame().getPriceHistory().isEmpty()) {
+		//calcul si la liste est vide
+		if (copy.getVideoGame().getPriceHistory().isEmpty() ) {
 			for (int i = 1; i <= weeksLate; i++) {
 				fine = 5 * dayLate;
 			}
@@ -140,32 +142,46 @@ public class Loan implements Serializable {
 			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
 			DAO<Loan> loanDAO = adf.getLoanDAO();
 			return loanDAO.update(this);
-		} else {
-			if (copy.getVideoGame().getPriceHistory().size() == 1) {
-				if (copy.getVideoGame().getPriceHistory().get(0).getDateOfChange().isAfter(startDate)
-						&& copy.getVideoGame().getPriceHistory().get(0).getDateOfChange().isBefore(today)) {
-					LocalDate dateOfChange = copy.getVideoGame().getPriceHistory().get(0).getDateOfChange();
-					int dayDifferenceBetweenTheFirst = (int) ChronoUnit.DAYS.between(this.startDate, dateOfChange);
+		} 
+		else {
+			//boucle jusqu'au dernier changement
+			for (int i = 0; i <= copy.getVideoGame().getPriceHistory().size() - 1; i++) {
+				if (copy.getVideoGame().getPriceHistory().get(i).getDateOfChange().isAfter(startDate)
+						&& copy.getVideoGame().getPriceHistory().get(i).getDateOfChange().isBefore(today)) {
+					LocalDate dateOfChange = copy.getVideoGame().getPriceHistory().get(i).getDateOfChange();
+					int dayDifferenceBetweenTheFirst = (int) ChronoUnit.DAYS.between(tempDate, dateOfChange);
 					int newWeeks;
 					if (dayDifferenceBetweenTheFirst % 7 == 0) {
 						newWeeks = dayDifferenceBetweenTheFirst / 7;
 					} else {
 						newWeeks = (dayDifferenceBetweenTheFirst / 7) + 1;
 					}
-					int dayDifferenceBetweenTheEnd = (int) ChronoUnit.DAYS.between(dateOfChange, today);
-					int newWeeks1;
-					if (dayDifferenceBetweenTheEnd % 7 == 0) {
-						newWeeks1 = dayDifferenceBetweenTheEnd / 7;
-					} else {
-						newWeeks1 = (dayDifferenceBetweenTheEnd / 7) + 1;
-					}
-					oldCredit = copy.getVideoGame().getPriceHistory().get(0).getOldPrice() * newWeeks;
-					newCredit = credit * newWeeks1;
-					tempCredit = oldCredit + newCredit;
-				} else {
-					tempCredit = credit * loanDurantionInWeeks;
+
+					oldCredit = copy.getVideoGame().getPriceHistory().get(i).getOldPrice() * newWeeks;
+					tempCredit = oldCredit + tempCredit;
+					tempDate = dateOfChange;
 				}
 			}
+			//dernier changement 
+			int sizeMax = copy.getVideoGame().getPriceHistory().size() - 1;
+			if (copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange().isAfter(startDate)
+					&& copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange().isBefore(today)) {
+				int dayDifferenceBetweenTheEnd = (int) ChronoUnit.DAYS
+						.between(copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange(), today);
+				int newWeeks1;
+				if (dayDifferenceBetweenTheEnd % 7 == 0) {
+					newWeeks1 = dayDifferenceBetweenTheEnd / 7;
+				} else {
+					newWeeks1 = (dayDifferenceBetweenTheEnd / 7) + 1;
+				}
+				newCredit = credit * newWeeks1;
+				tempCredit = tempCredit + newCredit;
+			}//si aucune date ne se trouve entre les changements
+			else
+			{
+				costOfTheLoan = credit * loanDurantionInWeeks;
+			}
+
 			for (int y = 1; y <= weeksLate; y++) {
 				fine = 5 * dayLate;
 			}
