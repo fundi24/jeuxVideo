@@ -17,6 +17,8 @@ public abstract class AbstractDAOFactory {
 	public abstract DAO<User> getUserDAO();
 
 	public abstract DAO<VideoGame> getVideoGameDAO();
+	
+	public abstract DAO<PriceHistory> getPriceHistoryDAO();
 
 	public static AbstractDAOFactory getFactory() {
 		return new DAOFactory();

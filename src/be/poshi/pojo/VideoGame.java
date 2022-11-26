@@ -20,11 +20,13 @@ public class VideoGame implements Serializable {
 	private String version;
 	private ArrayList<Copy> copies;
 	private ArrayList<Booking> bookings;
+	private ArrayList<PriceHistory> priceHistory;
 
 	// Constructeur
 	public VideoGame() {
 		copies = new ArrayList<Copy>();
 		bookings = new ArrayList<Booking>();
+		priceHistory = new ArrayList<PriceHistory>();
 	}
 
 	// Accesseurs
@@ -75,6 +77,14 @@ public class VideoGame implements Serializable {
 
 	public void setCopies(ArrayList<Copy> copies) {
 		this.copies = copies;
+	}
+
+	public ArrayList<PriceHistory> getPriceHistory() {
+		return priceHistory;
+	}
+
+	public void setPriceHistory(ArrayList<PriceHistory> priceHistory) {
+		this.priceHistory = priceHistory;
 	}
 
 	public String getConsole() {

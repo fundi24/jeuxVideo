@@ -25,7 +25,7 @@ public class Loan implements Serializable {
 		this.borrower = borrower;
 		this.lender = lender;
 	}
-	
+
 	public Loan(Copy copy, Player borrower) {
 		this.copy = copy;
 		this.borrower = borrower;
@@ -34,9 +34,9 @@ public class Loan implements Serializable {
 	public Loan(Copy copy) {
 		this.copy = copy;
 	}
-	
+
 	public Loan() {
-		
+
 	}
 
 	// Accesseurs
@@ -79,7 +79,7 @@ public class Loan implements Serializable {
 	public void setCopy(Copy copy) {
 		this.copy = copy;
 	}
-	
+
 	public Player getLender() {
 		return lender;
 	}
@@ -98,28 +98,103 @@ public class Loan implements Serializable {
 
 	// Methodes supplementaires
 	public boolean calculateBalance() {
-		
+
 		LocalDate today = LocalDate.now();
-		int differenceInDays = (int)ChronoUnit.DAYS.between(endDate, today);
-		int weeks = (differenceInDays / 7) + 1;
-		int credit = copy.getVideoGame().getCreditCost();
-		int costOfTheLoan = credit * weeks;
 		int fine = 0;
 		int newCreditLender = 0;
 		int newCreditBorrower = 0;
-		for (int i = 1; i<= weeks ; i++)
-		{
-			fine = 5 * differenceInDays;
+		int loanDuration = (int) ChronoUnit.DAYS.between(startDate, today);
+		int loanDurantionInWeeks;
+		if (loanDuration % 7 == 0) {
+			loanDurantionInWeeks = loanDuration / 7;
+		} else {
+			loanDurantionInWeeks = (loanDuration / 7) + 1;
 		}
-		
-		newCreditLender = lender.getCredit() + costOfTheLoan + fine;
-		newCreditBorrower = borrower.getCredit() - costOfTheLoan - fine;
-		lender.setCredit(newCreditLender);
-		borrower.setCredit(newCreditBorrower);
-		
-		AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
-		DAO<Loan> loanDAO = adf.getLoanDAO();
-		return loanDAO.update(this);
+		int dayLate = (int) ChronoUnit.DAYS.between(endDate, today);
+		int weeksLate;
+		if (dayLate % 7 == 0) {
+			weeksLate = dayLate / 7;
+
+		} else {
+			weeksLate = (dayLate / 7) + 1;
+
+		}
+		int credit = copy.getVideoGame().getCreditCost();
+		int costOfTheLoan = 0;
+
+		int oldCredit = 0;
+		int newCredit = 0;
+		int tempCredit = 0;
+		LocalDate tempDate = this.startDate;
+
+		//calcul si la liste est vide
+		if (copy.getVideoGame().getPriceHistory().isEmpty() ) {
+			for (int i = 1; i <= weeksLate; i++) {
+				fine = 5 * dayLate;
+			}
+
+			costOfTheLoan = credit * loanDurantionInWeeks;
+			newCreditLender = lender.getCredit() + costOfTheLoan + fine;
+			newCreditBorrower = borrower.getCredit() - costOfTheLoan - fine;
+			lender.setCredit(newCreditLender);
+			borrower.setCredit(newCreditBorrower);
+
+			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+			DAO<Loan> loanDAO = adf.getLoanDAO();
+			return loanDAO.update(this);
+		} 
+		else {
+			//boucle jusqu'au dernier changement
+			for (int i = 0; i <= copy.getVideoGame().getPriceHistory().size() - 1; i++) {
+				if (copy.getVideoGame().getPriceHistory().get(i).getDateOfChange().isAfter(startDate)
+						&& copy.getVideoGame().getPriceHistory().get(i).getDateOfChange().isBefore(today)) {
+					LocalDate dateOfChange = copy.getVideoGame().getPriceHistory().get(i).getDateOfChange();
+					int dayDifferenceBetweenTheFirst = (int) ChronoUnit.DAYS.between(tempDate, dateOfChange);
+					int newWeeks;
+					if (dayDifferenceBetweenTheFirst % 7 == 0) {
+						newWeeks = dayDifferenceBetweenTheFirst / 7;
+					} else {
+						newWeeks = (dayDifferenceBetweenTheFirst / 7) + 1;
+					}
+
+					oldCredit = copy.getVideoGame().getPriceHistory().get(i).getOldPrice() * newWeeks;
+					tempCredit = oldCredit + tempCredit;
+					tempDate = dateOfChange;
+				}
+			}
+			//dernier changement 
+			int sizeMax = copy.getVideoGame().getPriceHistory().size() - 1;
+			if (copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange().isAfter(startDate)
+					&& copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange().isBefore(today)) {
+				int dayDifferenceBetweenTheEnd = (int) ChronoUnit.DAYS
+						.between(copy.getVideoGame().getPriceHistory().get(sizeMax).getDateOfChange(), today);
+				int newWeeks1;
+				if (dayDifferenceBetweenTheEnd % 7 == 0) {
+					newWeeks1 = dayDifferenceBetweenTheEnd / 7;
+				} else {
+					newWeeks1 = (dayDifferenceBetweenTheEnd / 7) + 1;
+				}
+				newCredit = credit * newWeeks1;
+				tempCredit = tempCredit + newCredit;
+			}//si aucune date ne se trouve entre les changements
+			else
+			{
+				costOfTheLoan = credit * loanDurantionInWeeks;
+			}
+
+			for (int y = 1; y <= weeksLate; y++) {
+				fine = 5 * dayLate;
+			}
+
+			newCreditLender = lender.getCredit() + tempCredit + fine;
+			newCreditBorrower = borrower.getCredit() - tempCredit - fine;
+			lender.setCredit(newCreditLender);
+			borrower.setCredit(newCreditBorrower);
+
+			AbstractDAOFactory adf = AbstractDAOFactory.getFactory();
+			DAO<Loan> loanDAO = adf.getLoanDAO();
+			return loanDAO.update(this);
+		}
 	}
 
 	public void endLoan() {

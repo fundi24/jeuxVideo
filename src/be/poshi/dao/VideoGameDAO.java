@@ -14,6 +14,7 @@ import be.poshi.pojo.Booking;
 import be.poshi.pojo.Copy;
 import be.poshi.pojo.Loan;
 import be.poshi.pojo.Player;
+import be.poshi.pojo.PriceHistory;
 import be.poshi.pojo.VideoGame;
 
 public class VideoGameDAO extends DAO<VideoGame> {
@@ -95,10 +96,12 @@ public class VideoGameDAO extends DAO<VideoGame> {
 		Booking booking = null;
 		Copy copy = null;
 		Loan loan = null;
+		PriceHistory priceHistory = null;
 
 		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '" + id + "'";
 		String query2 = "SELECT * FROM (VideoGame INNER JOIN Booking ON VideoGame.IdVideoGame = Booking.IdVideoGame) INNER JOIN User ON Booking.IdUser = User.IdUser WHERE VideoGame.IdVideoGame = '" + id + "'";
 		String query3 = "SELECT * FROM (VideoGame INNER JOIN Copy ON VideoGame.IdVideoGame = Copy.IdVideoGame) LEFT JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE VideoGame.IdVideoGame = '" + id + "'";
+		String query4 = "SELECT * FROM VideoGame INNER JOIN PriceHistory on VideoGame.IdVideoGame = PriceHistory.IdVideoGame WHERE VideoGame.IdVideoGame = '" + id +"'";
 		
 		try {
 			ResultSet result = this.connect
@@ -160,6 +163,27 @@ public class VideoGameDAO extends DAO<VideoGame> {
 				vg.setVersion(result.getString("VersionName"));
 				copy.setVideoGame(vg);
 				videoGame.getCopies().add(copy);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//recuperer son historique
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query4);
+			while (result.next()) {
+				priceHistory = new PriceHistory();
+				priceHistory.setOldPrice(result.getInt("OldPrice"));
+				priceHistory.setDateOfChange(result.getDate("DateOfChange").toLocalDate());
+				VideoGame vg = new VideoGame();
+				vg.setIdVideoGame(id);
+				vg.setName(result.getString("VideoGameName"));
+				vg.setCreditCost(result.getInt("CreditCost"));
+				vg.setConsole(result.getString("ConsoleName"));
+				vg.setVersion(result.getString("VersionName"));
+				priceHistory.setVideoGame(vg);
+				videoGame.getPriceHistory().add(priceHistory);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

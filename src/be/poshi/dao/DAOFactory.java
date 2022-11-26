@@ -43,4 +43,9 @@ public class DAOFactory extends AbstractDAOFactory {
 	public DAO<VideoGame> getVideoGameDAO() {
 		return new VideoGameDAO(conn);
 	}
+	
+	public DAO<PriceHistory> getPriceHistoryDAO()
+	{
+		return new PriceHistoryDAO(conn);
+	}
 }
