@@ -83,6 +83,7 @@ public class CopyDAO extends DAO<Copy> {
 				VideoGame vg = videoGameDAO.find(idVideoGame);
 				copy = new Copy(vg);
 				copy.setIdCopy(id);
+				copy.setLoan(null);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

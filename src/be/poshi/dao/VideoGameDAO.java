@@ -149,6 +149,13 @@ public class VideoGameDAO extends DAO<VideoGame> {
 				loan.setEndDate(result.getDate("EndDate").toLocalDate());
 				loan.setOngoing(result.getBoolean("OnGoing"));
 				copy.setLoan(loan);
+				VideoGame vg = new VideoGame();
+				vg.setIdVideoGame(id);
+				vg.setName(result.getString("VideoGameName"));
+				vg.setCreditCost(result.getInt("CreditCost"));
+				vg.setConsole(result.getString("ConsoleName"));
+				vg.setVersion(result.getString("VersionName"));
+				copy.setVideoGame(vg);
 				videoGame.getCopies().add(copy);
 			}
 		} catch (SQLException e) {
