@@ -98,7 +98,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 
 		String query = "SELECT * FROM VideoGame WHERE VideoGame.IdVideoGame = '" + id + "'";
 		String query2 = "SELECT * FROM (VideoGame INNER JOIN Booking ON VideoGame.IdVideoGame = Booking.IdVideoGame) INNER JOIN User ON Booking.IdUser = User.IdUser WHERE VideoGame.IdVideoGame = '" + id + "'";
-		String query3 = "SELECT TOP 1 * FROM (VideoGame INNER JOIN Copy ON VideoGame.IdVideoGame = Copy.IdVideoGame) INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE VideoGame.IdVideoGame = '" + id + "' ORDER BY Loan.EndDate DESC ";
+		String query3 = "SELECT * FROM (VideoGame INNER JOIN Copy ON VideoGame.IdVideoGame = Copy.IdVideoGame) LEFT JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE VideoGame.IdVideoGame = '" + id + "'";
 		
 		try {
 			ResultSet result = this.connect
@@ -143,11 +143,14 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			while (result.next()) {
 				copy = new Copy();
 				copy.setIdCopy(result.getInt("IdCopy"));
-				loan = new Loan();
-				loan.setIdLoan(result.getInt("IdLoan"));
-				loan.setStartDate(result.getDate("StartDate").toLocalDate());
-				loan.setEndDate(result.getDate("EndDate").toLocalDate());
-				loan.setOngoing(result.getBoolean("OnGoing"));
+				if(result.getInt("IdLoan") > 0)
+				{
+					loan = new Loan();
+					loan.setIdLoan(result.getInt("IdLoan"));
+					loan.setStartDate(result.getDate("StartDate").toLocalDate());
+					loan.setEndDate(result.getDate("EndDate").toLocalDate());
+					loan.setOngoing(result.getBoolean("OnGoing"));
+				}
 				copy.setLoan(loan);
 				VideoGame vg = new VideoGame();
 				vg.setIdVideoGame(id);
