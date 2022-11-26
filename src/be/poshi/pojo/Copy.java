@@ -80,7 +80,11 @@ public class Copy implements Serializable {
 	public boolean isAvailable() {
 		boolean isValid = true;
 			
-		if(this.loan.getOngoing() == true || this.loan.equals(null))
+		if(this.loan == null)
+		{
+			isValid = false;
+		}	
+		else if(this.loan.getOngoing() == true)
 		{
 			isValid = false;
 		}
