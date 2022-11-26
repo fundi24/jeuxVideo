@@ -69,9 +69,7 @@ public class CopyDAO extends DAO<Copy> {
 		Copy copy = null;
 		Loan loan = null;
 
-		String query1 = "SELECT * FROM Copy WHERE IdCopy = '" + id + "'";
-		String query2 = "SELECT TOP 1 * FROM Copy INNER JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdCopy ='"
-				+ id + "' ORDER BY Loan.EndDate DESC ";
+		String query1 = "SELECT * FROM (VideoGame INNER JOIN Copy ON VideoGame.IdVideoGame = Copy.IdVideoGame) LEFT JOIN Loan ON Copy.IdCopy = Loan.IdCopy WHERE Copy.IdCopy= '" + id +"'";
 
 		try {
 			ResultSet result = this.connect
@@ -83,23 +81,14 @@ public class CopyDAO extends DAO<Copy> {
 				VideoGame vg = videoGameDAO.find(idVideoGame);
 				copy = new Copy(vg);
 				copy.setIdCopy(id);
-				copy.setLoan(null);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		// recuperer loan
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(query2);
-			if (result.first()) {
-				loan = new Loan();
-				loan.setIdLoan(result.getInt("IdLoan"));
-				loan.setStartDate(result.getDate("StartDate").toLocalDate());
-				loan.setEndDate(result.getDate("EndDate").toLocalDate());
-				loan.setOngoing(result.getBoolean("OnGoing"));
+				if(result.getInt("IdLoan") > 0)
+				{
+					loan = new Loan();
+					loan.setIdLoan(result.getInt("IdLoan"));
+					loan.setStartDate(result.getDate("StartDate").toLocalDate());
+					loan.setEndDate(result.getDate("EndDate").toLocalDate());
+					loan.setOngoing(result.getBoolean("OnGoing"));
+				}
 				copy.setLoan(loan);
 			}
 		} catch (SQLException e) {

@@ -136,7 +136,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 			e.printStackTrace();
 		}
 		
-		// recuperer copies
+		// recuperer copies et ses loans
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query3);

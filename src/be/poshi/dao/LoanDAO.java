@@ -72,7 +72,7 @@ public class LoanDAO extends DAO<Loan> {
 		Loan loan = null;
 
 		String query1 = "SELECT * FROM Loan INNER JOIN Copy ON Copy.IdCopy = Loan.IdCopy WHERE IdLoan = '" + id + "'";
-		String query2 = "SELECT TOP 1 * FROM Loan  INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = '" + id + "'";
+		String query2 = "SELECT * FROM Loan INNER JOIN User ON Loan.IdUser = User.IdUser WHERE IdLoan = '" + id + "'";
 		
 		try {
 			ResultSet result = this.connect
