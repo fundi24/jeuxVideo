@@ -17,7 +17,6 @@ public abstract class User implements Serializable {
 	}
 
 	// Accesseurs
-
 	public int getIdUser() {
 		return idUser;
 	}
