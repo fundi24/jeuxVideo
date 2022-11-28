@@ -174,7 +174,7 @@ public class VideoGameDAO extends DAO<VideoGame> {
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query4);
 			while (result.next()) {
 				priceHistory = new PriceHistory();
-				priceHistory.setOldPrice(result.getInt("OldPrice"));
+				priceHistory.setOldCredit(result.getInt("OldPrice"));
 				priceHistory.setDateOfChange(result.getDate("DateOfChange").toLocalDate());
 				VideoGame vg = new VideoGame();
 				vg.setIdVideoGame(id);

@@ -157,7 +157,7 @@ public class Loan implements Serializable {
 						newWeeks = (dayDifferenceBetweenTheFirst / 7) + 1;
 					}
 
-					oldCredit = copy.getVideoGame().getPriceHistory().get(i).getOldPrice() * newWeeks;
+					oldCredit = copy.getVideoGame().getPriceHistory().get(i).getOldCredit() * newWeeks;
 					tempCredit = oldCredit + tempCredit;
 					tempDate = dateOfChange;
 				}
